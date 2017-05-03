@@ -1,1 +1,1 @@
-# gzlianjia
+# a crawler for gz-lianjia
