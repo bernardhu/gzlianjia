@@ -20,9 +20,9 @@ from model import TradedHouse, DistricHouse
 grabedPool = {}
 
 #gz_district = ['tianhe', 'yuexiu', 'liwan', 'panyu', 'baiyun', 'huangpugz', 'conghua', 'zengcheng', 'huadou', 'luogang', 'nansha']
-gz_district = ['huadou', 'luogang', 'nansha']
+gz_district = ['nansha']
 global start_offset
-start_offset = 5
+start_offset = 4
 
 
 user_agent_list = [
@@ -98,7 +98,7 @@ def get_distric_community_cnt(distric):
     print "try to grab %s community cnt "%distric
     url = "http://gz.lianjia.com/xiaoqu/%s/"%distric
     r = requests.get(url, headers= get_header(), timeout= 30)
-    #print r.text
+    print r.text
     soup = BeautifulSoup(r.content, "lxml")
     pages = soup.find("div", class_="page-box house-lst-page-box")
     time.sleep(random.randint(5,10))
@@ -331,7 +331,7 @@ def start():
     global start_offset
     for dis in gz_district:
         cnt = get_distric_chengjiao_cnt(dis, proxy)
-        for i in xrange(start_offset, cnt):
+        for i in xrange(start_offset, cnt+1):
             page = "http://gz.lianjia.com/chengjiao/%s/pg%s/"%(dis, format(str(i)))
             #grab(page, proxy)
 
