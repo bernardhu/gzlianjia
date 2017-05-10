@@ -22,8 +22,7 @@ grabedPool = {}
 #gz_district = ['tianhe', 'yuexiu', 'liwan', 'haizhu', 'panyu', 'baiyun', 'huangpugz', 'conghua', 'zengcheng', 'huadou', 'luogang', 'nansha']
 gz_district = ['haizhu']
 global start_offset
-start_offset = 9
-
+start_offset = 1
 
 user_agent_list = [
         "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/22.0.1207.1 Safari/537.1",
@@ -98,7 +97,7 @@ def get_distric_community_cnt(distric):
     print "try to grab %s community cnt "%distric
     url = "http://gz.lianjia.com/xiaoqu/%s/"%distric
     r = requests.get(url, headers= get_header(), timeout= 30)
-    print r.text
+    #print r.text.encode("utf-8")
     soup = BeautifulSoup(r.content, "lxml")
     pages = soup.find("div", class_="page-box house-lst-page-box")
     time.sleep(random.randint(5,10))
@@ -129,17 +128,17 @@ def grab_distric(url):
         distUrl = item.a["href"] or ''
 
         if distUrl in grabedPool["data"]:
-            print distUrl, " 已经存在，跳过，开始抓取下一个"
+            print distUrl, "already exits，skip"
             continue
 
-        print '开始抓取' , distUrl
+        print "start to crawl" , distUrl
 
 
         # 抓取 历史成交
-        title = item.find("div", class_="title").a.string
+        title = item.find("div", class_="title").a.string.encode("utf-8")
         historyList = item.find("div", class_="houseInfo").find_all('a')
-        history = historyList[0].string
-        m = re.match(ur"(\d+)天成交(\d+)套", history)
+        history = historyList[0].string.encode("utf-8")
+        m = re.match(r"(\d+)天成交(\d+)套", history)
         print m, history
         historyRange = 0
         historySell = 0
@@ -151,13 +150,13 @@ def grab_distric(url):
 
         # 抓取 区&商圈
         pos = item.find("div", class_="positionInfo").find_all('a')
-        dis = pos[0].string
-        bizcircle = pos[1].string
+        dis = pos[0].string.encode("utf-8")
+        bizcircle = pos[1].string.encode("utf-8")
         print dis, bizcircle
 
         #抓取成交均价噢
-        avgStr = item.find("div", class_="totalPrice").span.string
-        m = re.match(ur"(\d+)", avgStr)
+        avgStr = item.find("div", class_="totalPrice").span.string.encode("utf-8")
+        m = re.match(r"(\d+)", avgStr)
         if m:
             avg = int(avgStr)
         else:
