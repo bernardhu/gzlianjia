@@ -196,6 +196,7 @@ def get_distric_chengjiao_cnt(distric, proxy):
     print "try to grab %s chengjiao cnt "%distric
     url = "http://gz.lianjia.com/chengjiao/%s/"%distric
     r = requests.get(url, headers= get_header(), timeout= 30)
+    print r.text.encode("utf-8")
     soup = BeautifulSoup(r.content, "lxml")
 
     try:
@@ -375,10 +376,10 @@ def grab(url, proxy, disName, bizDic):
 
 
         if houseUrl in grabedPool["data"]:
-            print houseUrl, " 已经存在，跳过，开始抓取下一个"
+            print houseUrl, "already exit, skip"
             continue
 
-        print '开始抓取' , houseUrl
+        print 'start to crawl' , houseUrl
 
 
         # 抓取 小区，户型，面积
@@ -389,8 +390,12 @@ def grab(url, proxy, disName, bizDic):
             m = re.match(ur'\b[0-9]+(\.[0-9]+)?', square)
             if m:
                 square = m.group(1)
+                print m.group(0), m.group(1)
         else:
             xiaoqu, houseType, square = ('Nav', 'Nav', 0)
+
+        xiaoqu = xiaoqu.encode("utf-8")
+        houseType = houseType.encode("utf-8")
         print xiaoqu, houseType, square
 
         deal = int(item.find("div", class_="totalPrice").span.string)
