@@ -1,23 +1,27 @@
 # -*- coding: utf-8 -*-
 
-from peewee import SqliteDatabase, Model, CharField, DateTimeField
+from peewee import SqliteDatabase, Model, CharField, DateTimeField, IntegerField, FloatField
 
 db = SqliteDatabase('./houseprice.db')
 
 class TradedHouse(Model):
 	xiaoqu = CharField()
 	houseType = CharField()
-	square = CharField()
+	square = FloatField()
 	houseUrl = CharField()
 	orientation = CharField()
 	decoration = CharField()
 	elevator = CharField()
-	floor = CharField()
-	build = CharField()
-	price = CharField()
+	floorLevel = CharField()
+	floorTotal = IntegerField()
+	build = IntegerField()
+	price = IntegerField()
 	tradeDate = DateTimeField()
-	bid = CharField()
-	cycle = CharField()
+	bid = IntegerField()
+	deal = IntegerField()
+	cycle = IntegerField()
+	district = CharField()
+	bizcircle = CharField()
 
 	class Meta:
 		database = db
@@ -26,10 +30,11 @@ class DistricHouse(Model):
 	name = CharField()
 	district = CharField()
 	bizcircle = CharField()
-	history = CharField()
+	historyRange = IntegerField()
+	historySell = IntegerField()
 	ref = CharField()
-	avgpx = CharField()
-	onsell = CharField()
+	avgpx = IntegerField()
+	onsell = IntegerField()
 
 	class Meta:
 		database = db

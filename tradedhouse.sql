@@ -2,27 +2,32 @@ DROP TABLE IF EXISTS "tradedhouse";
 CREATE TABLE "tradedhouse" (
     "id" INTEGER NOT NULL PRIMARY KEY, 
     "xiaoqu" VARCHAR(255) NOT NULL, 
-    "houseType" VARCHAR(255) NOT NULL, 
-    "square" VARCHAR(255) NOT NULL, 
+    "houseType" VARCHAR(64) NOT NULL, 
+    "square" REAL NOT NULL, 
     "houseUrl" VARCHAR(255) NOT NULL, 
-    "orientation" VARCHAR(255) NOT NULL, 
-    "decoration" VARCHAR(255) NOT NULL, 
-    "elevator" VARCHAR(255) NOT NULL, 
-    "floor" VARCHAR(255) NOT NULL, 
-    "build" VARCHAR(255) NOT NULL, 
-    "price" VARCHAR(255) NOT NULL, 
+    "orientation" VARCHAR(32) NOT NULL, 
+    "decoration" VARCHAR(32) NOT NULL, 
+    "elevator" VARCHAR(32) NOT NULL, 
+    "floorLevel" VARCHAR(32) NOT NULL, 
+    "floorTotal" INTEGER NOT NULL, 
+    "build" INTEGER NOT NULL, 
+    "price" INTEGER NOT NULL, 
     "tradeDate" DATETIME NOT NULL, 
-    "bid" VARCHAR(255) NOT NULL, 
-    "cycle" VARCHAR(255) NOT NULL
+    "bid" INTEGER NOT NULL, 
+    "cycle" INTEGER NOT NULL,
+    "district" VARCHAR(32) NOT NULL, 
+    "bizcircle" VARCHAR(32) NOT NULL
 );
 
 DROP TABLE IF EXISTS "districhouse";
 CREATE TABLE "districhouse" (
     "id" INTEGER NOT NULL PRIMARY KEY, 
-    "district" VARCHAR(255) NOT NULL, 
-    "bizcircle" VARCHAR(255) NOT NULL, 
-    "history" VARCHAR(255) NOT NULL, 
+    "name" VARCHAR(255) NOT NULL, 
+    "district" VARCHAR(32) NOT NULL, 
+    "bizcircle" VARCHAR(32) NOT NULL, 
+    "historyRange" INTEGER NOT NULL, 
+    "historySell" INTEGER NOT NULL, 
     "ref" VARCHAR(255) NOT NULL, 
-    "avgpx" VARCHAR(255) NOT NULL, 
-    "onsell" VARCHAR(255) NOT NULL 
+    "avgpx" INTEGER NOT NULL, 
+    "onsell" INTEGER NOT NULL 
 );

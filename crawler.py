@@ -7,6 +7,7 @@ import time
 import random
 import json
 import re
+import chardet
 
 
 import requests
@@ -18,8 +19,11 @@ from model import TradedHouse, DistricHouse
 
 grabedPool = {}
 
-#gz_district = ['tianhe', 'yuexiu', 'liwan', 'panyu', 'baiyun', 'huangpugz', 'conghua', 'zengcheng', 'huadu', 'luogang', 'nansha']
+#gz_district = ['tianhe', 'yuexiu', 'liwan', 'panyu', 'baiyun', 'huangpugz', 'conghua', 'zengcheng', 'huadou', 'luogang', 'nansha']
 gz_district = ['huadou', 'luogang', 'nansha']
+global start_offset
+start_offset = 5
+
 
 user_agent_list = [
         "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/22.0.1207.1 Safari/537.1",
@@ -102,9 +106,6 @@ def get_distric_community_cnt(distric):
     jo = json.loads(pageStr)
     return jo['totalPage']
 
-global start_offset
-start_offset = 1
-
 def get_distric_info(distric, cnt):
     global start_offset
     for i in xrange(start_offset, cnt):
@@ -137,7 +138,15 @@ def grab_distric(url):
         title = item.find("div", class_="title").a.string
         historyList = item.find("div", class_="houseInfo").find_all('a')
         history = historyList[0].string
-        print title, history
+        m = re.match(ur"(\d+)天成交(\d+)套", history)
+        print m, history
+        historyRange = 0
+        historySell = 0
+        if m:
+            historyRange = m.group(1)
+            historySell = m.group(2)
+
+        print title, history, historyRange, historySell
 
         # 抓取 区&商圈
         pos = item.find("div", class_="positionInfo").find_all('a')
@@ -146,11 +155,16 @@ def grab_distric(url):
         print dis, bizcircle
 
         #抓取成交均价噢
-        avg = item.find("div", class_="totalPrice").span.string
+        avgStr = item.find("div", class_="totalPrice").span.string
+        m = re.match(ur"(\d+)", avgStr)
+        if m:
+            avg = int(avgStr)
+        else:
+            avg = 0
         print avg
 
         #抓取在售
-        onSell = item.find("div", class_="xiaoquListItemSellCount").a.span.string
+        onSell = int(item.find("div", class_="xiaoquListItemSellCount").a.span.string)
         print onSell
 
         # 通过 ORM 存储到 sqlite
@@ -158,7 +172,8 @@ def grab_distric(url):
                                 name = title,
                                 district = dis,
                                 bizcircle = bizcircle,
-                                history = history,
+                                historyRange = historyRange,
+                                historySell = historySell,
                                 ref = distUrl,
                                 avgpx = avg,
                                 onsell = onSell,
@@ -293,9 +308,9 @@ def build_proxy():
 @before_grab
 def start():
     #build_proxy()
-    #for dis in gz_district:
-    #    cnt = get_distric_community_cnt(dis)
-    #    get_distric_info(dis, cnt)
+    for dis in gz_district:
+        cnt = get_distric_community_cnt(dis)
+        get_distric_info(dis, cnt)
 
     proxy = [
             'http://222.85.50.165:808',
@@ -361,10 +376,15 @@ def grab(url, proxy):
         if title:
             print title
             xiaoqu, houseType, square = (title.string.replace("  ", " ").split(" "))
+            m = re.match(ur'\b[0-9]+(\.[0-9]+)?', square)
+            if m:
+                square = m.group(1)
         else:
-            xiaoqu, houseType, square = ('Nav', 'Nav', 'Nav')
+            xiaoqu, houseType, square = ('Nav', 'Nav', 0)
         print xiaoqu, houseType, square
 
+        deal = int(item.find("div", class_="totalPrice").span.string)
+        print deal
 
         # 朝向，装修，电梯
         houseInfo = item.find("div", class_="houseInfo").contents[1]
@@ -386,27 +406,33 @@ def grab(url, proxy):
         posInfo = item.find("div", class_="positionInfo").contents[1]
         if posInfo:
             floor, build = ([x.strip() for x in posInfo.split(" ")])
-        print floor, build
+        m = re.match(ur'(\w+)楼层(共(\d+)层)', floor)
+        if m:
+            floorLevel = m.group(1)
+            floorTotal = m.group(2)
+        m = re.match(r'(\d+)年建', build)
+        if m:
+            build = m.group(1)
+        print floorLevel, floorTotal, build
 
         #均价
         priceInfo = item.find("div", class_="unitPrice").span
         if priceInfo:
-            price = priceInfo.string
+            price = int(priceInfo.string)
         else :
-            price = 'Nav'
-            print item
+            price = 0
         print price
 
         #挂牌价，成交周期
         dealCycle = item.find("span", class_="dealCycleTxt").find_all('span')
         if dealCycle:
             if len(dealCycle) == 1:
-                bid = dealCycle[0].string
-                cycle = 'Nav'
+                bid = int(dealCycle[0].string)
+                cycle = 0
 
             if len(dealCycle) == 2:
-                bid = dealCycle[0].string
-                cycle = dealCycle[1].string
+                bid = int(dealCycle[0].string)
+                cycle = int(dealCycle[1].string)
         print bid, cycle
 
         # 通过 ORM 存储到 sqlite
@@ -418,11 +444,13 @@ def grab(url, proxy):
                                 orientation = orientation,
                                 decoration = decoration,
                                 elevator = elevator,
-                                floor = floor,
+                                floorLevel = floorLevel,
+                                floorTotal = floorTotal,
                                 build = build,
                                 price = price,
                                 tradeDate = tradeDate,
                                 bid = bid,
+                                deal = deal,
                                 cycle = cycle,
                                 )
 
