@@ -19,10 +19,10 @@ from model import TradedHouse, DistricHouse
 
 grabedPool = {}
 
-#gz_district = ['tianhe', 'yuexiu', 'liwan', 'panyu', 'baiyun', 'huangpugz', 'conghua', 'zengcheng', 'huadou', 'luogang', 'nansha']
-gz_district = ['nansha']
+#gz_district = ['tianhe', 'yuexiu', 'liwan', 'haizhu', 'panyu', 'baiyun', 'huangpugz', 'conghua', 'zengcheng', 'huadou', 'luogang', 'nansha']
+gz_district = ['haizhu']
 global start_offset
-start_offset = 4
+start_offset = 9
 
 
 user_agent_list = [
@@ -107,8 +107,9 @@ def get_distric_community_cnt(distric):
     return jo['totalPage']
 
 def get_distric_info(distric, cnt):
+    print "get_distric_info", distric, cnt
     global start_offset
-    for i in xrange(start_offset, cnt):
+    for i in xrange(start_offset, cnt+1):
         url = "http://gz.lianjia.com/xiaoqu/%s/pg%s/"%(distric, format(str(i)))
         grab_distric(url)
     if start_offset > 1:
@@ -330,7 +331,7 @@ def start():
             'http://210.22.85.34:8080']
     global start_offset
     for dis in gz_district:
-        cnt = get_distric_chengjiao_cnt(dis, proxy)
+        #cnt = get_distric_chengjiao_cnt(dis, proxy)
         for i in xrange(start_offset, cnt+1):
             page = "http://gz.lianjia.com/chengjiao/%s/pg%s/"%(dis, format(str(i)))
             #grab(page, proxy)
