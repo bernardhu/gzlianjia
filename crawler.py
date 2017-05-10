@@ -20,9 +20,9 @@ from model import TradedHouse, DistricHouse
 grabedPool = {}
 
 #gz_district = ['tianhe', 'yuexiu', 'liwan', 'haizhu', 'panyu', 'baiyun', 'huangpugz', 'conghua', 'zengcheng', 'huadou', 'luogang', 'nansha']
-gz_district = ['haizhu']
+gz_district = ['tianhe']
 global start_offset
-start_offset = 1
+start_offset = 47
 
 user_agent_list = [
         "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/22.0.1207.1 Safari/537.1",
