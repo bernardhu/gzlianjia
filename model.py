@@ -25,6 +25,7 @@ class TradedHouse(Model):
 
 	class Meta:
 		database = db
+                db_table = 'tradehouse'
 
 class DistricHouse(Model):
 	name = CharField()
@@ -38,6 +39,7 @@ class DistricHouse(Model):
 
 	class Meta:
 		database = db
+                db_table = 'districhouse'
 
 def create_table():
 	db.create_tables([TradedHouse, DistricHouse])

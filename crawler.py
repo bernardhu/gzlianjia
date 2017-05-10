@@ -20,9 +20,12 @@ from model import TradedHouse, DistricHouse
 grabedPool = {}
 
 #gz_district = ['tianhe', 'yuexiu', 'liwan', 'haizhu', 'panyu', 'baiyun', 'huangpugz', 'conghua', 'zengcheng', 'huadou', 'luogang', 'nansha']
+gz_district_name = {"tianhe":"天河", "yuexiu":"越秀", "liwan":"荔湾", "haizhu":"海珠",
+        "panyu":"番禺", "baiyun":"白云", "huangpugz":"黄埔", "conghu": "从化", "zengcheng": "增城",
+        "huadou":"花都", "luogang": "萝岗","nansha":"南沙"}
 gz_district = ['tianhe']
 global start_offset
-start_offset = 47
+start_offset = 1
 
 user_agent_list = [
         "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/22.0.1207.1 Safari/537.1",
@@ -308,9 +311,9 @@ def build_proxy():
 @before_grab
 def start():
     #build_proxy()
-    for dis in gz_district:
-        cnt = get_distric_community_cnt(dis)
-        get_distric_info(dis, cnt)
+    #for dis in gz_district:
+    #    cnt = get_distric_community_cnt(dis)
+    #    get_distric_info(dis, cnt)
 
     proxy = [
             'http://222.85.50.165:808',
@@ -330,17 +333,24 @@ def start():
             'http://210.22.85.34:8080']
     global start_offset
     for dis in gz_district:
-        #cnt = get_distric_chengjiao_cnt(dis, proxy)
+        print dis, gz_district_name[dis]
+        distric = DistricHouse.select(DistricHouse.name, DistricHouse.bizcircle).where(DistricHouse.district == gz_district_name[dis])
+        bizDic = {}
+        for item in distric:
+            #print item.name, item.bizcircle
+            bizDic[item.name] = item.bizcircle
+
+        cnt = get_distric_chengjiao_cnt(dis, proxy)
         for i in xrange(start_offset, cnt+1):
             page = "http://gz.lianjia.com/chengjiao/%s/pg%s/"%(dis, format(str(i)))
-            #grab(page, proxy)
+            grab(page, proxy, gz_district_name[dis], bizDic)
 
         if start_offset > 1:
             start_offset = 1
 
 
 @after_grab
-def grab(url, proxy):
+def grab(url, proxy, disName, bizDic):
     print "try to grab page ", url
     r = requests.get(url, headers= get_header(), timeout= 30)
     soup = BeautifulSoup(r.content, "lxml")
@@ -452,10 +462,12 @@ def grab(url, proxy):
                                 bid = bid,
                                 deal = deal,
                                 cycle = cycle,
+                                district = disName,
+                                bizcircle = bizDic,
                                 )
 
 
-        tradeItem.save()
+        #tradeItem.save()
 
         # 添加到已经抓取的池
         grabedPool["data"].add(houseUrl)
