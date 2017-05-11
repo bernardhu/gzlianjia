@@ -8,6 +8,7 @@ import random
 import json
 import re
 import chardet
+import string
 
 
 import requests
@@ -23,9 +24,9 @@ grabedPool = {}
 gz_district_name = {"tianhe":"天河", "yuexiu":"越秀", "liwan":"荔湾", "haizhu":"海珠",
         "panyu":"番禺", "baiyun":"白云", "huangpugz":"黄埔", "conghu": "从化", "zengcheng": "增城",
         "huadou":"花都", "luogang": "萝岗","nansha":"南沙"}
-gz_district = ['tianhe']
+gz_district = ['yuexiu']
 global start_offset
-start_offset = 1
+start_offset = 17
 
 user_agent_list = [
         "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/22.0.1207.1 Safari/537.1",
@@ -138,7 +139,7 @@ def grab_distric(url):
 
 
         # 抓取 历史成交
-        title = item.find("div", class_="title").a.string.encode("utf-8")
+        title = item.find("div", class_="title").a.string.encode("utf-8").rstrip()
         historyList = item.find("div", class_="houseInfo").find_all('a')
         history = historyList[0].string.encode("utf-8")
         m = re.match(r"(\d+)天成交(\d+)套", history)
@@ -196,7 +197,7 @@ def get_distric_chengjiao_cnt(distric, proxy):
     print "try to grab %s chengjiao cnt "%distric
     url = "http://gz.lianjia.com/chengjiao/%s/"%distric
     r = requests.get(url, headers= get_header(), timeout= 30)
-    print r.text.encode("utf-8")
+    #print r.text.encode("utf-8")
     soup = BeautifulSoup(r.content, "lxml")
 
     try:
@@ -220,7 +221,8 @@ def get_distric_chengjiao_cnt(distric, proxy):
         return jo['totalPage']
 
 def get_xici_proxy(url, proxys):
-    r = requests.get(url, headers= get_header(), timeout= 30)
+    print "get proxy", url
+    r = requests.get(url, headers= get_header(), timeout= 10)
     soup = BeautifulSoup(r.content, "lxml")
     pages = soup.find_all("tr", class_="odd")
     for page in pages:
@@ -232,19 +234,21 @@ def get_xici_proxy(url, proxys):
                 "http": proxy
                 }
         try:
-            r = requests.get(url, headers= get_header(), proxies=proxies, timeout= 10)
+            r = requests.get(url, headers= get_header(), proxies=proxies, timeout= 3)
             soup = BeautifulSoup(r.content, "lxml")
 
             tradedHoustList = soup.find("ul", class_="listContent")
             if not tradedHoustList:
                 continue
             proxys.append(proxy)
-            print proxy
+            print proxy, proxys
         except Exception, e:
-            print Exception,":",e
+            #print Exception,":",e
+            continue
 
 def get_kuaidaili_proxy(url, proxys):
-    r = requests.get(url, headers= get_header(), timeout= 30)
+    print "get proxy", url
+    r = requests.get(url, headers= get_header(), timeout= 10)
     soup = BeautifulSoup(r.content, "lxml")
     pages = soup.find("tbody").find_all("tr")
     for page in pages:
@@ -257,24 +261,26 @@ def get_kuaidaili_proxy(url, proxys):
                 "http": proxy
                 }
         try:
-            r = requests.get(url, headers= get_header(), proxies=proxies, timeout= 10)
+            r = requests.get(url, headers= get_header(), proxies=proxies, timeout= 3)
             soup = BeautifulSoup(r.content, "lxml")
 
             tradedHoustList = soup.find("ul", class_="listContent")
             if not tradedHoustList:
                 continue
             proxys.append(proxy)
-            print proxy
+            print proxy, proxys
         except Exception, e:
-            print Exception,":",e
+            #print Exception,":",e
+            continue
 
 def get_youdaili_proxy(url, proxys):
-    r = requests.get(url, headers= get_header(), timeout= 30)
+    print "get proxy", url
+    r = requests.get(url, headers= get_header(), timeout= 10)
     soup = BeautifulSoup(r.content, "lxml")
     pages = soup.find("div", class_="chunlist").find_all("a")
     page = pages[0]
     u = page["href"]
-    html = requests.get(u, headers= get_header(), timeout= 30).content
+    html = requests.get(u, headers= get_header(), timeout= 3).content
     proxy_list = re.findall(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d{1,5}', html)
 
     for proxy in proxy_list:
@@ -283,63 +289,52 @@ def get_youdaili_proxy(url, proxys):
                 "http": proxy
                 }
         try:
-            r = requests.get(url, headers= get_header(), proxies=proxies, timeout= 10)
+            r = requests.get(url, headers= get_header(), proxies=proxies, timeout= 3)
             soup = BeautifulSoup(r.content, "lxml")
 
             tradedHoustList = soup.find("ul", class_="listContent")
             if not tradedHoustList:
                 continue
             proxys.append(proxy)
-            print proxy
+            print proxy, proxys
         except Exception, e:
-            print Exception,":",e
+            #print Exception,":",e
+            continue
 
 def build_proxy():
     proxys = []
-    get_xici_proxy("http://www.xicidaili.com/nn/1", proxys)
-    get_xici_proxy("http://www.xicidaili.com/nn/2", proxys)
+    #get_xici_proxy("http://www.xicidaili.com/nn/1", proxys)
+    #get_xici_proxy("http://www.xicidaili.com/nn/2", proxys)
 
     get_kuaidaili_proxy("http://www.kuaidaili.com/proxylist/1", proxys)
     get_kuaidaili_proxy("http://www.kuaidaili.com/proxylist/2", proxys)
     get_kuaidaili_proxy("http://www.kuaidaili.com/proxylist/3", proxys)
     get_kuaidaili_proxy("http://www.kuaidaili.com/proxylist/4", proxys)
 
-    get_youdaili_proxy("http://www.youdaili.net/Daili/http", proxys)
+    #get_youdaili_proxy("http://www.youdaili.net/Daili/http", proxys)
 
     print proxys
+
+    return proxys
 
 
 @before_grab
 def start():
-    #build_proxy()
+    proxy = []
+    #proxy = build_proxy()
     #for dis in gz_district:
     #    cnt = get_distric_community_cnt(dis)
     #    get_distric_info(dis, cnt)
 
-    proxy = [
-            'http://222.85.50.165:808',
-            'http://119.5.1.96:808',
-            'http://115.220.147.11:808',
-            'http://123.179.131.32:8080',
-            'http://175.155.25.55:808',
-            'http://183.32.88.169:808',
-            'http://222.85.39.168:808',
-            'http://183.32.89.7:808',
-            'http://222.139.197.72:8118',
-            'http://222.179.210.94:8081',
-            'http://119.90.63.3:3128',
-            'http://113.123.39.222:808',
-            'http://58.52.201.117:8080',
-            'http://103.238.202.103:8080',
-            'http://210.22.85.34:8080']
     global start_offset
     for dis in gz_district:
         print dis, gz_district_name[dis]
         distric = DistricHouse.select(DistricHouse.name, DistricHouse.bizcircle).where(DistricHouse.district == gz_district_name[dis])
         bizDic = {}
         for item in distric:
-            #print item.name, item.bizcircle
-            bizDic[item.name] = item.bizcircle
+            name = item.name.encode("utf-8").rstrip()
+            biz = item.bizcircle.encode("utf-8")
+            bizDic[name] = biz
 
         cnt = get_distric_chengjiao_cnt(dis, proxy)
         for i in xrange(start_offset, cnt+1):
@@ -370,6 +365,7 @@ def grab(url, proxy, disName, bizDic):
     if not tradedHoustList:
         return
 
+    storge = []
     for item in tradedHoustList:
         # 房屋详情链接，唯一标识符
         houseUrl = item.a["href"] or ''
@@ -387,18 +383,21 @@ def grab(url, proxy, disName, bizDic):
         if title:
             print title
             xiaoqu, houseType, square = (title.string.replace("  ", " ").split(" "))
-            m = re.match(ur'\b[0-9]+(\.[0-9]+)?', square)
+            m = re.match(ur"\b[0-9]+(\.[0-9]+)?", square)
             if m:
-                square = m.group(1)
-                print m.group(0), m.group(1)
+                square = string.atof(m.group(0))
         else:
             xiaoqu, houseType, square = ('Nav', 'Nav', 0)
 
-        xiaoqu = xiaoqu.encode("utf-8")
+        xiaoqu = xiaoqu.encode("utf-8").rstrip()
         houseType = houseType.encode("utf-8")
         print xiaoqu, houseType, square
 
-        deal = int(item.find("div", class_="totalPrice").span.string)
+        dealInfo = item.find("div", class_="totalPrice").span
+        if dealInfo:
+            deal = string.atof(dealInfo.string.encode("utf-8"))
+        else :
+            deal = -1
         print deal
 
         # 朝向，装修，电梯
@@ -420,12 +419,17 @@ def grab(url, proxy, disName, bizDic):
         #楼层，楼龄
         posInfo = item.find("div", class_="positionInfo").contents[1]
         if posInfo:
-            floor, build = ([x.strip() for x in posInfo.split(" ")])
-        m = re.match(ur'(\w+)楼层(共(\d+)层)', floor)
+            floor, buildStr = ([x.strip() for x in posInfo.split(" ")])
+        print floor, buildStr
+        m = re.match(ur"(.*)楼层\(共(\d+)层\)", floor)
+        floorLevel = 'Nav'
+        floorTotal = -1
         if m:
             floorLevel = m.group(1)
             floorTotal = m.group(2)
-        m = re.match(r'(\d+)年建', build)
+            print m.group(0), m.group(1), m.group(2)
+        m = re.match(ur"(\d+)年建", buildStr)
+        build = -1
         if m:
             build = m.group(1)
         print floorLevel, floorTotal, build
@@ -440,15 +444,31 @@ def grab(url, proxy, disName, bizDic):
 
         #挂牌价，成交周期
         dealCycle = item.find("span", class_="dealCycleTxt").find_all('span')
+        bid = -1
+        cycle = -1
         if dealCycle:
             if len(dealCycle) == 1:
-                bid = int(dealCycle[0].string)
-                cycle = 0
+                bidStr = dealCycle[0].string
+                cycleStr = ""
 
             if len(dealCycle) == 2:
-                bid = int(dealCycle[0].string)
-                cycle = int(dealCycle[1].string)
-        print bid, cycle
+                bidStr = dealCycle[0].string
+                cycleStr = dealCycle[1].string
+
+            print bidStr, cycleStr
+            m = re.match(ur"挂牌(\d+)万", bidStr)
+            if m:
+                bid = m.group(1)
+
+            m = re.match(ur"成交周期(\d+)天", cycleStr)
+            if m:
+                cycle = m.group(1)
+
+        try:
+            biz = bizDic[xiaoqu]
+        except Exception, e:
+            biz = "unknown"
+        print bid, cycle, disName, biz
 
         # 通过 ORM 存储到 sqlite
         tradeItem = TradedHouse(
@@ -468,15 +488,16 @@ def grab(url, proxy, disName, bizDic):
                                 deal = deal,
                                 cycle = cycle,
                                 district = disName,
-                                bizcircle = bizDic,
+                                bizcircle = biz,
                                 )
 
+        storge.append(tradeItem)
 
-        #tradeItem.save()
 
+    for s in storge:
+        s.save()
         # 添加到已经抓取的池
-        grabedPool["data"].add(houseUrl)
-
+        grabedPool["data"].add(s.houseUrl)
 
     # 抓取完成后，休息几秒钟，避免给对方服务器造成大负担
     time.sleep(random.randint(1,3))

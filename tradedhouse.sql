@@ -14,6 +14,7 @@ CREATE TABLE "tradedhouse" (
     "price" INTEGER NOT NULL, 
     "tradeDate" DATETIME NOT NULL, 
     "bid" INTEGER NOT NULL, 
+    "deal" REAL NOT NULL, 
     "cycle" INTEGER NOT NULL,
     "district" VARCHAR(32) NOT NULL, 
     "bizcircle" VARCHAR(32) NOT NULL
