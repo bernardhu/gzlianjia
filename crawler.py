@@ -26,7 +26,7 @@ gz_district_name = {"tianhe":"天河", "yuexiu":"越秀", "liwan":"荔湾", "hai
         "huadou":"花都", "luogang": "萝岗","nansha":"南沙"}
 gz_district = ['haizhu','panyu']
 global start_offset
-start_offset = 25
+start_offset = 69
 
 user_agent_list = [
         "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/22.0.1207.1 Safari/537.1",
