@@ -25,7 +25,7 @@ class TradedHouse(Model):
 
 	class Meta:
 		database = db
-                db_table = 'tradehouse'
+                db_table = 'tradedhouse'
 
 class DistricHouse(Model):
 	name = CharField()
