@@ -24,9 +24,9 @@ grabedPool = {}
 gz_district_name = {"tianhe":"天河", "yuexiu":"越秀", "liwan":"荔湾", "haizhu":"海珠",
         "panyu":"番禺", "baiyun":"白云", "huangpugz":"黄埔", "conghu": "从化", "zengcheng": "增城",
         "huadou":"花都", "luogang": "萝岗","nansha":"南沙"}
-gz_district = ['yuexiu']
+gz_district = ['haizhu','panyu']
 global start_offset
-start_offset = 17
+start_offset = 25
 
 user_agent_list = [
         "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/22.0.1207.1 Safari/537.1",
@@ -408,7 +408,7 @@ def grab(url, proxy, disName, bizDic):
                 elevator = 'Nav'
             if len(houseInfo.split("|")) == 3:
                 orientation, decoration, elevator = ([x.strip() for x in houseInfo.split("|")])
-        print orientation, decoration, elevator
+        print orientation.encode("utf-8"), decoration.encode("utf-8"), elevator.encode("utf-8")
 
         #成交日期
         dealDate = item.find("div", class_="dealDate")
@@ -420,19 +420,19 @@ def grab(url, proxy, disName, bizDic):
         posInfo = item.find("div", class_="positionInfo").contents[1]
         if posInfo:
             floor, buildStr = ([x.strip() for x in posInfo.split(" ")])
-        print floor, buildStr
+        print floor.encode("utf-8"), buildStr.encode("utf-8")
         m = re.match(ur"(.*)楼层\(共(\d+)层\)", floor)
         floorLevel = 'Nav'
         floorTotal = -1
         if m:
             floorLevel = m.group(1)
             floorTotal = m.group(2)
-            print m.group(0), m.group(1), m.group(2)
+            print m.group(1).encode("utf-8"), m.group(2)
         m = re.match(ur"(\d+)年建", buildStr)
         build = -1
         if m:
             build = m.group(1)
-        print floorLevel, floorTotal, build
+        print floorLevel.encode("utf-8"), floorTotal, build
 
         #均价
         priceInfo = item.find("div", class_="unitPrice").span
@@ -455,7 +455,7 @@ def grab(url, proxy, disName, bizDic):
                 bidStr = dealCycle[0].string
                 cycleStr = dealCycle[1].string
 
-            print bidStr, cycleStr
+            print bidStr.encode("utf-8"), cycleStr.encode("utf-8")
             m = re.match(ur"挂牌(\d+)万", bidStr)
             if m:
                 bid = m.group(1)
