@@ -20,6 +20,27 @@ CREATE TABLE "tradedhouse" (
     "bizcircle" VARCHAR(32) NOT NULL
 );
 
+CREATE TABLE "bidhouse" (
+    "id" INTEGER NOT NULL PRIMARY KEY, 
+    "xiaoqu" VARCHAR(255) NOT NULL, 
+    "houseType" VARCHAR(64) NOT NULL, 
+    "square" REAL NOT NULL, 
+    "houseUrl" VARCHAR(255) NOT NULL, 
+    "orientation" VARCHAR(32) NOT NULL, 
+    "decoration" VARCHAR(32) NOT NULL, 
+    "elevator" VARCHAR(32) NOT NULL, 
+    "floorLevel" VARCHAR(32) NOT NULL, 
+    "floorTotal" INTEGER NOT NULL, 
+    "build" INTEGER NOT NULL, 
+    "price" INTEGER NOT NULL, 
+    "bid" REAL NOT NULL, 
+    "watch" INTEGER NOT NULL, 
+    "release" INTEGER NOT NULL, 
+    "seen" INTEGER NOT NULL, 
+    "district" VARCHAR(32) NOT NULL, 
+    "bizcircle" VARCHAR(32) NOT NULL
+);
+
 DROP TABLE IF EXISTS "districhouse";
 CREATE TABLE "districhouse" (
     "id" INTEGER NOT NULL PRIMARY KEY, 
