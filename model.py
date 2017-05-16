@@ -66,7 +66,7 @@ class DistricHouse(Model):
                 db_table = 'districhouse'
 
 def create_table():
-	#db.create_tables([TradedHouse, DistricHouse, BidHouse])
-	db.create_tables([BidHouse])
+	db.create_tables([TradedHouse, DistricHouse, BidHouse])
+	#db.create_tables([BidHouse])
 
 #create_table()
