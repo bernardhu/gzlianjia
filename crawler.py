@@ -21,13 +21,13 @@ from model import TradedHouse, DistricHouse, BidHouse
 grabedPool = {}
 
 #gz_district = ['tianhe', 'yuexiu', 'liwan', 'haizhu', 'panyu', 'baiyun', 'huangpugz', 'conghua', 'zengcheng', 'huadou', 'luogang', 'nansha']
-gz_district = ['nansha']
+gz_district = ['panyu', 'baiyun', 'huangpugz', 'conghua', 'zengcheng', 'huadou', 'luogang', 'nansha']
 gz_district_name = {"tianhe":"天河", "yuexiu":"越秀", "liwan":"荔湾", "haizhu":"海珠",
         "panyu":"番禺", "baiyun":"白云", "huangpugz":"黄埔", "conghua": "从化", "zengcheng": "增城",
         "huadou":"花都", "luogang": "萝岗","nansha":"南沙"}
 #gz_district = ['conghua', 'zengcheng', 'huadou', 'luogang', 'nansha']
 global start_offset
-start_offset = 1
+start_offset = 39
 
 user_agent_list = [
         "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/22.0.1207.1 Safari/537.1",
