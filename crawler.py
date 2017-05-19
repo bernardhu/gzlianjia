@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import pickle
+import math
 import os.path
 import datetime
 import time
@@ -15,19 +16,19 @@ import requests
 from bs4 import BeautifulSoup
 
 
-from model import TradedHouse, DistricHouse, BidHouse
+from model import TradedHouse, DistricHouse, BidHouse, RentHouse
 
 
 grabedPool = {}
 
 #gz_district = ['tianhe', 'yuexiu', 'liwan', 'haizhu', 'panyu', 'baiyun', 'huangpugz', 'conghua', 'zengcheng', 'huadou', 'luogang', 'nansha']
-gz_district = ['panyu', 'baiyun', 'huangpugz', 'conghua', 'zengcheng', 'huadou', 'luogang', 'nansha']
-gz_district_name = {"tianhe":"天河", "yuexiu":"越秀", "liwan":"荔湾", "haizhu":"海珠",
-        "panyu":"番禺", "baiyun":"白云", "huangpugz":"黄埔", "conghua": "从化", "zengcheng": "增城",
-        "huadou":"花都", "luogang": "萝岗","nansha":"南沙"}
+gz_district = ['yuexiu', 'liwan', 'haizhu', 'panyu', 'baiyun', 'huangpugz', 'conghua', 'zengcheng', 'huadou', 'luogang', 'nansha']
+gz_district_name = {"tianhe":u"天河", "yuexiu":u"越秀", "liwan":u"荔湾", "haizhu":u"海珠",
+        "panyu":u"番禺", "baiyun":u"白云", "huangpugz":u"黄埔", "conghua": u"从化", "zengcheng": u"增城",
+        "huadou":u"花都", "luogang": u"萝岗","nansha":u"南沙"}
 #gz_district = ['conghua', 'zengcheng', 'huadou', 'luogang', 'nansha']
 global start_offset
-start_offset = 39
+start_offset = 20
 
 user_agent_list = [
         "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/22.0.1207.1 Safari/537.1",
@@ -97,6 +98,18 @@ def after_grab(func):
             with open("grabedPool.set" , "wb") as f:
                 pickle.dump(grabedPool["data"], f)
     return wapper
+
+def get_distric_rent_cnt(distric):
+    print "try to grab %s community rent cnt "%distric
+    url = "http://gz.lianjia.com/zufang/%s/"%distric
+    r = requests.get(url, headers= get_header(), timeout= 30)
+    #print r.text.encode("utf-8")
+    soup = BeautifulSoup(r.content, "lxml")
+    pages = soup.find("div", class_="page-box house-lst-page-box")
+    time.sleep(random.randint(5,10))
+    pageStr = pages["page-data"]
+    jo = json.loads(pageStr)
+    return jo['totalPage']
 
 def get_distric_community_cnt(distric):
     print "try to grab %s community cnt "%distric
@@ -346,40 +359,144 @@ def build_proxy():
     return proxys
 
 
-@before_grab
-def start():
-    proxy = []
-    #proxy = build_proxy()
-    #for dis in gz_district:
-    #    cnt = get_distric_community_cnt(dis)
-    #    get_distric_info(dis, cnt)
+def grabRent(url, proxy, disName, priceDic, bizDic):
+    print "try to grab page ", url
+    r = requests.get(url, headers= get_header(), timeout= 30)
+    soup = BeautifulSoup(r.content, "lxml")
+    try:
+        bidHoustList = soup.find("ul", class_="house-lst").find_all('li')
+    except Exception, e:
+        i = random.randint(0,len(proxy)-1)
+        proxies = {
+                "http": proxy[i]
+                }
+        print "try proxy", proxy[i]
+        r = requests.get(url, headers= get_header(), proxies=proxies, timeout= 10)
+        soup = BeautifulSoup(r.content, "lxml")
+        bidHoustList = soup.find("ul", class_="house-lst").find_all('li')
 
-    global start_offset
-    for dis in gz_district:
-        print dis, gz_district_name[dis]
-        distric = DistricHouse.select(DistricHouse.name, DistricHouse.bizcircle, DistricHouse.avgpx).where(DistricHouse.district == gz_district_name[dis])
-        bizDic = {}
-        priceDic = {}
-        for item in distric:
-            name = item.name.encode("utf-8").rstrip()
-            biz = item.bizcircle.encode("utf-8")
-            bizDic[name] = biz
-            price = item.avgpx
-            priceDic[name] = price
+    if not bidHoustList:
+        return
 
-        #cnt = get_distric_chengjiao_cnt(dis, proxy)
-        #for i in xrange(start_offset, cnt+1):
-        #    page = "http://gz.lianjia.com/chengjiao/%s/pg%s/"%(dis, format(str(i)))
-        #    grab(page, proxy, gz_district_name[dis], bizDic)
+    storge = []
+    for item in bidHoustList:
+        # 房屋详情链接，唯一标识符
+        houseUrl = item.a["href"] or ''
 
-        cnt = get_distric_bid_cnt(dis, proxy)
-        for i in xrange(start_offset, cnt+1):
-        #for i in xrange(1, 2):
-            page = "http://gz.lianjia.com/ershoufang/%s/pg%s/"%(dis, format(str(i)))
-            grabBid(page, proxy, gz_district_name[dis], priceDic)
 
-        if start_offset > 1:
-            start_offset = 1
+        if houseUrl in grabedPool["data"]:
+            print houseUrl, "already exit, skip"
+            continue
+
+        print 'start to crawl' , houseUrl
+
+        # 抓取 小区，户型，面积 朝向，装修，电梯
+	xiaoqu = item.find("div", class_="where").a.string.rstrip().encode("utf-8")
+        houseType = item.find("span", class_="zone").span.string.rstrip().encode("utf-8")
+        squareStr = item.find("span", class_="meters").string.rstrip().encode("utf-8")
+        orientation = item.find("div", class_="where").findAll("span")[4].string.encode("utf-8").rstrip()
+        print xiaoqu, houseType, squareStr, orientation
+
+        m = re.match(r"\b[0-9]+(\.[0-9]+)?", squareStr)
+        square = 0
+        if m:
+            square = string.atof(m.group(0))
+
+        print squareStr, square
+
+        #楼层，楼龄
+        posInfo = item.find("div", class_="con").contents[2]
+        m = re.match(ur"(.*)楼层\(共(\d+)层\)", posInfo)
+        floorLevel = 'Nav'
+        floorTotal = -1
+        if m:
+            floorLevel = m.group(1)
+            floorTotal = m.group(2)
+            print m.group(1).encode("utf-8"), m.group(2)
+        print floorLevel.encode("utf-8"), floorTotal
+
+        #挂牌价
+        priceInfo = item.find("div", class_="price").span
+        if priceInfo:
+            price = string.atof(priceInfo.string)
+        else :
+            price = 0
+        print price
+
+        pricePre = item.find("div", class_="price-pre").string
+        priceUpdate, misc = ([x.strip() for x in pricePre.split(" ")])
+        print priceUpdate
+
+
+        #关注，带看， 放盘
+        seenStr = item.find("div", class_="square").find("span", class_="num").string
+        seen = 0
+        if m:
+            seen = string.atoi(seenStr)
+        print seen
+
+
+        try:
+            avg = priceDic[xiaoqu]
+        except Exception, e:
+            print e
+            avg = 0
+        print "avg", avg
+
+        try:
+            biz = bizDic[xiaoqu]
+        except Exception, e:
+            print e
+            biz = ""
+        print "biz", biz
+
+
+        loan = 0
+        loan = square*avg -1500000
+
+        loanRet = 0
+        yearRate = 0.049
+        monthRate = 0.049/12
+        loanYear = 30
+        loanMonth = loanYear*12
+
+        if loan < 0 :
+            loan = 0
+            loanRet = 0
+        else:
+            loanRet = loan*monthRate*((1+monthRate)**loanMonth)/(((1+monthRate)**loanMonth)-1)
+            loan = round(loan/10000)
+        print loan, loanRet
+
+
+        # 通过 ORM 存储到 sqlite
+        BidItem = RentHouse(
+                                xiaoqu = xiaoqu,
+                                houseType = houseType,
+                                square = square,
+                                houseUrl = houseUrl,
+                                orientation = orientation,
+                                floorLevel = floorLevel,
+                                floorTotal = floorTotal,
+                                price = price,
+                                avg = avg,
+                                loan = loan,
+                                loanRet = loanRet,
+                                seen = seen,
+                                bizcircle = biz,
+                                district = disName,
+                                )
+
+        storge.append(BidItem)
+
+
+    for s in storge:
+        s.save()
+        # 添加到已经抓取的池
+        grabedPool["data"].add(s.houseUrl)
+
+    # 抓取完成后，休息几秒钟，避免给对方服务器造成大负担
+    time.sleep(random.randint(1,3))
 
 def grabBid(url, proxy, disName, priceDic):
     print "try to grab page ", url
@@ -694,6 +811,48 @@ def grab(url, proxy, disName, bizDic):
     # 抓取完成后，休息几秒钟，避免给对方服务器造成大负担
     time.sleep(random.randint(1,3))
 
+@before_grab
+def start():
+    proxy = []
+    #proxy = build_proxy()
+    #for dis in gz_district:
+    #    cnt = get_distric_community_cnt(dis)
+    #    get_distric_info(dis, cnt)
+
+    global start_offset
+    for dis in gz_district:
+        print dis, gz_district_name[dis]
+        distric = DistricHouse.select(DistricHouse.name, DistricHouse.bizcircle, DistricHouse.avgpx).where(DistricHouse.district == gz_district_name[dis])
+        print distric
+        bizDic = {}
+        priceDic = {}
+        for item in distric:
+            name = item.name.rstrip().encode("utf-8")
+            biz = item.bizcircle.encode("utf-8")
+            bizDic[name] = biz
+            price = item.avgpx
+            priceDic[name] = price
+            #print name
+
+        #cnt = get_distric_chengjiao_cnt(dis, proxy)
+        #for i in xrange(start_offset, cnt+1):
+        #    page = "http://gz.lianjia.com/chengjiao/%s/pg%s/"%(dis, format(str(i)))
+        #    grab(page, proxy, gz_district_name[dis], bizDic)
+
+        #cnt = get_distric_bid_cnt(dis, proxy)
+        #for i in xrange(start_offset, cnt+1):
+        #for i in xrange(1, 2):
+        #    page = "http://gz.lianjia.com/ershoufang/%s/pg%s/"%(dis, format(str(i)))
+        #    grabBid(page, proxy, gz_district_name[dis], priceDic)
+
+        cnt = get_distric_rent_cnt(dis)
+        for i in xrange(start_offset, cnt+1):
+        #for i in xrange(1, 2):
+            page = "http://gz.lianjia.com/zufang/%s/pg%s/"%(dis, format(str(i)))
+            grabRent(page, proxy, gz_district_name[dis], priceDic, bizDic)
+
+        if start_offset > 1:
+            start_offset = 1
 
 if __name__== "__main__":
     start()

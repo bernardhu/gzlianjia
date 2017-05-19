@@ -65,8 +65,28 @@ class DistricHouse(Model):
 		database = db
                 db_table = 'districhouse'
 
+class RentHouse(Model):
+	xiaoqu = CharField()
+	houseType = CharField()
+	square = FloatField()
+	houseUrl = CharField()
+	orientation = CharField()
+	floorLevel = CharField()
+	floorTotal = IntegerField()
+	price = IntegerField()
+	avg = IntegerField()
+	loan = IntegerField()
+	loanRet = IntegerField()
+	seen = IntegerField()
+        district = CharField()
+	bizcircle = CharField()
+
+	class Meta:
+		database = db
+                db_table = 'renthouse'
+
 def create_table():
-	db.create_tables([TradedHouse, DistricHouse, BidHouse])
-	#db.create_tables([BidHouse])
+	#db.create_tables([TradedHouse, DistricHouse, BidHouse, RentHouse])
+	db.create_tables([TradedHouse, BidHouse, RentHouse])
 
 #create_table()
