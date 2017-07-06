@@ -3,6 +3,7 @@
 import pickle
 import math
 import os.path
+import shutil
 import datetime
 import time
 import random
@@ -16,17 +17,15 @@ import requests
 from bs4 import BeautifulSoup
 
 
-from model import TradedHouse, DistricHouse, BidHouse, RentHouse
+from model import TradedHouse, DistricHouse, BidHouse, RentHouse, create_table
 
 
 grabedPool = {}
 
-#gz_district = ['tianhe', 'yuexiu', 'liwan', 'haizhu', 'panyu', 'baiyun', 'huangpugz', 'conghua', 'zengcheng', 'huadou', 'luogang', 'nansha']
-gz_district = ['huadou', 'luogang', 'nansha']
+gz_district = ['tianhe', 'yuexiu', 'liwan', 'haizhu', 'panyu', 'baiyun', 'huangpugz', 'conghua', 'zengcheng', 'huadou', 'luogang', 'nansha']
 gz_district_name = {"tianhe":u"天河", "yuexiu":u"越秀", "liwan":u"荔湾", "haizhu":u"海珠",
         "panyu":u"番禺", "baiyun":u"白云", "huangpugz":u"黄埔", "conghua": u"从化", "zengcheng": u"增城",
         "huadou":u"花都", "luogang": u"萝岗","nansha":u"南沙"}
-#gz_district = ['conghua', 'zengcheng', 'huadou', 'luogang', 'nansha']
 global start_offset
 start_offset = 1
 
@@ -123,14 +122,6 @@ def get_distric_community_cnt(distric):
     jo = json.loads(pageStr)
     return jo['totalPage']
 
-def get_distric_info(distric, cnt):
-    print "get_distric_info", distric, cnt
-    global start_offset
-    for i in xrange(start_offset, cnt+1):
-        url = "http://gz.lianjia.com/xiaoqu/%s/pg%s/"%(distric, format(str(i)))
-        grab_distric(url)
-    if start_offset > 1:
-        start_offset = 1
 
 def grab_distric(url):
     print "try to grab distric page ", url
@@ -145,9 +136,9 @@ def grab_distric(url):
         # 房屋详情链接，唯一标识符
         distUrl = item.a["href"] or ''
 
-        if distUrl in grabedPool["data"]:
-            print distUrl, "already exits，skip"
-            continue
+        #if distUrl in grabedPool["data"]:
+        #    print distUrl, "already exits，skip"
+        #    continue
 
         print "start to crawl" , distUrl
 
@@ -201,7 +192,7 @@ def grab_distric(url):
         distItem.save()
 
         # 添加到已经抓取的池
-        grabedPool["data"].add(distUrl)
+        #grabedPool["data"].add(distUrl)
 
 
     # 抓取完成后，休息几秒钟，避免给对方服务器造成大负担
@@ -384,9 +375,9 @@ def grabRent(url, proxy, disName, priceDic, bizDic):
         houseUrl = item.a["href"] or ''
 
 
-        if houseUrl in grabedPool["data"]:
-            print houseUrl, "already exit, skip"
-            continue
+        #if houseUrl in grabedPool["data"]:
+        #    print houseUrl, "already exit, skip"
+        #    continue
 
         print 'start to crawl' , houseUrl
 
@@ -493,7 +484,7 @@ def grabRent(url, proxy, disName, priceDic, bizDic):
     for s in storge:
         s.save()
         # 添加到已经抓取的池
-        grabedPool["data"].add(s.houseUrl)
+        #grabedPool["data"].add(s.houseUrl)
 
     # 抓取完成后，休息几秒钟，避免给对方服务器造成大负担
     time.sleep(random.randint(1,3))
@@ -523,9 +514,9 @@ def grabBid(url, proxy, disName, priceDic):
         houseUrl = item.a["href"] or ''
 
 
-        if houseUrl in grabedPool["data"]:
-            print houseUrl, "already exit, skip"
-            continue
+        #if houseUrl in grabedPool["data"]:
+        #    print houseUrl, "already exit, skip"
+        #    continue
 
         print 'start to crawl' , houseUrl
 
@@ -649,7 +640,7 @@ def grabBid(url, proxy, disName, priceDic):
     for s in storge:
         s.save()
         # 添加到已经抓取的池
-        grabedPool["data"].add(s.houseUrl)
+        #grabedPool["data"].add(s.houseUrl)
 
     # 抓取完成后，休息几秒钟，避免给对方服务器造成大负担
     time.sleep(random.randint(1,3))
@@ -680,9 +671,9 @@ def grab(url, proxy, disName, bizDic):
         houseUrl = item.a["href"] or ''
 
 
-        if houseUrl in grabedPool["data"]:
-            print houseUrl, "already exit, skip"
-            continue
+        #if houseUrl in grabedPool["data"]:
+        #    print houseUrl, "already exit, skip"
+        #    continue
 
         print 'start to crawl' , houseUrl
 
@@ -789,7 +780,7 @@ def grab(url, proxy, disName, bizDic):
                                 decoration = decoration,
                                 elevator = elevator,
                                 floorLevel = floorLevel,
-                                floorTotal = floorTotal,
+                                sssssssssssssssssloorTotal = floorTotal,
                                 build = build,
                                 price = price,
                                 tradeDate = tradeDate,
@@ -806,22 +797,48 @@ def grab(url, proxy, disName, bizDic):
     for s in storge:
         s.save()
         # 添加到已经抓取的池
-        grabedPool["data"].add(s.houseUrl)
+        #grabedPool["data"].add(s.houseUrl)
 
     # 抓取完成后，休息几秒钟，避免给对方服务器造成大负担
     time.sleep(random.randint(1,3))
 
-@before_grab
-def start():
-    proxy = []
-    #proxy = build_proxy()
-    #for dis in gz_district:
-    #    cnt = get_distric_community_cnt(dis)
-    #    get_distric_info(dis, cnt)
+step_context = {"phase":0, "cnt":0, "offset":0, "pgoffset":1, "date":"20170705"}
 
-    global start_offset
-    for dis in gz_district:
-        #print dis, gz_district_name[dis]
+def save_context():
+    global step_context
+    print "save", step_context, type(step_context)
+    json.dump(step_context, open('context','w'))
+
+def load_context():
+    global step_context
+    step_context = json.load(open('context','r'))
+    print "load", step_context, type(step_context)
+
+
+def crawl_district():
+    global step_context
+    for dis_offset in xrange(step_context['offset'], len(gz_district)):
+        dis = gz_district[dis_offset]
+        cnt = step_context['cnt']
+        if cnt == 0:
+            cnt = get_distric_community_cnt(dis)
+        print "get_distric_info", dis, cnt
+        step_context['cnt'] = cnt
+        step_context['offset'] = dis_offset
+        save_context()
+        for i in xrange(step_context['pgoffset'], cnt+1):
+            step_context['pgoffset'] = i
+            save_context()
+            url = "http://gz.lianjia.com/xiaoqu/%s/pg%s/"%(dis, format(str(i)))
+            grab_distric(url)
+        step_context['pgoffset'] = 1
+        step_context['cnt'] = 0
+        save_context()
+
+def crawl_district_chengjiao():
+    global step_context
+    for dis_offset in xrange(step_context['offset'], len(gz_district)):
+        dis = gz_district[dis_offset]
         distric = DistricHouse.select(DistricHouse.name, DistricHouse.bizcircle, DistricHouse.avgpx).where(DistricHouse.district == gz_district_name[dis])
         print distric
         bizDic = {}
@@ -834,25 +851,133 @@ def start():
             priceDic[name] = price
             #print name
 
-        #cnt = get_distric_chengjiao_cnt(dis, proxy)
-        #for i in xrange(start_offset, cnt+1):
-        #    page = "http://gz.lianjia.com/chengjiao/%s/pg%s/"%(dis, format(str(i)))
-        #    grab(page, proxy, gz_district_name[dis], bizDic)
+        cnt = step_context['cnt']
+        if cnt == 0:
+            cnt = get_distric_chengjiao_cnt(dis, proxy)
 
-        #cnt = get_distric_bid_cnt(dis, proxy)
-        #for i in xrange(start_offset, cnt+1):
-        #for i in xrange(1, 2):
-        #    page = "http://gz.lianjia.com/ershoufang/%s/pg%s/"%(dis, format(str(i)))
-        #    grabBid(page, proxy, gz_district_name[dis], priceDic)
+        step_context['cnt'] = cnt
+        step_context['offset'] = dis_offset
+        save_context()
+        for i in xrange(step_context['pgoffset'], cnt+1):
+            step_context['pgoffset'] = i
+            save_context()
+            page = "http://gz.lianjia.com/chengjiao/%s/pg%s/"%(dis, format(str(i)))
+            grab(page, [], gz_district_name[dis], bizDic)
 
-        cnt = get_distric_rent_cnt(dis)
-        for i in xrange(start_offset, cnt+1):
-        #for i in xrange(1, 2):
+        step_context['pgoffset'] = 1
+        step_context['cnt'] = 0
+        save_context()
+
+def crawl_district_bid():
+    global step_context
+    for dis_offset in xrange(step_context['offset'], len(gz_district)):
+        dis = gz_district[dis_offset]
+        distric = DistricHouse.select(DistricHouse.name, DistricHouse.bizcircle, DistricHouse.avgpx).where(DistricHouse.district == gz_district_name[dis])
+        print distric
+        bizDic = {}
+        priceDic = {}
+        for item in distric:
+            name = item.name.rstrip().encode("utf-8")
+            biz = item.bizcircle.encode("utf-8")
+            bizDic[name] = biz
+            price = item.avgpx
+            priceDic[name] = price
+            #print name
+
+        cnt = step_context['cnt']
+        if cnt == 0:
+            cnt = get_distric_bid_cnt(dis, proxy)
+
+        step_context['cnt'] = cnt
+        step_context['offset'] = dis_offset
+        save_context()
+        for i in xrange(step_context['pgoffset'], cnt+1):
+            step_context['pgoffset'] = i
+            save_context()
+            page = "http://gz.lianjia.com/ershoufang/%s/pg%s/"%(dis, format(str(i)))
+            grabBid(page, proxy, gz_district_name[dis], priceDic)
+
+        step_context['pgoffset'] = 1
+        step_context['cnt'] = 0
+        save_context()
+
+def crawl_district_rent():
+    global step_context
+    for dis_offset in xrange(step_context['offset'], len(gz_district)):
+        dis = gz_district[dis_offset]
+        distric = DistricHouse.select(DistricHouse.name, DistricHouse.bizcircle, DistricHouse.avgpx).where(DistricHouse.district == gz_district_name[dis])
+        print distric
+        bizDic = {}
+        priceDic = {}
+        for item in distric:
+            name = item.name.rstrip().encode("utf-8")
+            biz = item.bizcircle.encode("utf-8")
+            bizDic[name] = biz
+            price = item.avgpx
+            priceDic[name] = price
+            #print name
+
+        cnt = step_context['cnt']
+        if cnt == 0:
+            cnt = get_distric_rent_cnt(dis, proxy)
+
+        step_context['cnt'] = cnt
+        step_context['offset'] = dis_offset
+        save_context()
+        for i in xrange(step_context['pgoffset'], cnt+1):
+            step_context['pgoffset'] = i
+            save_context()
             page = "http://gz.lianjia.com/zufang/%s/pg%s/"%(dis, format(str(i)))
             grabRent(page, proxy, gz_district_name[dis], priceDic, bizDic)
 
-        if start_offset > 1:
-            start_offset = 1
+        step_context['pgoffset'] = 1
+        step_context['cnt'] = 0
+        save_context()
+
+
+def process_context():
+    #global step_context
+    print step_context['phase']
+    if step_context['phase'] == 0:
+        crawl_district()
+        step_context['phase'] = 1
+        step_context['cnt'] = 0
+        step_context['offset'] = 0
+        step_context['pgoffset'] = 1
+        step_context['date'] = time.strftime("%Y%m%d", time.localtime())
+        save_context()
+    elif step_context['phase'] == 1:
+        crawl_district_chengjiao()
+        step_context['phase'] = 2
+        step_context['cnt'] = 0
+        step_context['offset'] = 0
+        step_context['pgoffset'] = 1
+        save_context()
+    elif step_context['phase'] == 2:
+        crawl_district_bid()
+        step_context['phase'] = 3
+        step_context['cnt'] = 0
+        step_context['offset'] = 0
+        step_context['pgoffset'] = 1
+        save_context()
+    elif step_context['phase'] == 3:
+        crawl_district_rent()
+        step_context['phase'] = -1
+        step_context['cnt'] = 0
+        step_context['offset'] = 0
+        step_context['pgoffset'] = 1
+        save_context()
+    elif step_context['phase'] == -1:
+        shutil.move('houseprice.db', time.strftime("houseprice_%Y%m%d.db", time.localtime()))
+        create_table()
+        step_context['phase'] = -1
 
 if __name__== "__main__":
-    start()
+    #save_context()
+    load_context()
+
+    if step_context['phase'] == -1:
+        process_context()
+
+    while step_context['phase'] != -1:
+        process_context()
