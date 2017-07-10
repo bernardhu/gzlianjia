@@ -11,13 +11,14 @@ import json
 import re
 import chardet
 import string
+import base64
 
 
 import requests
 from bs4 import BeautifulSoup
 
 
-from model import TradedHouse, DistricHouse, BidHouse, RentHouse, create_table
+from model import TradedHouse, DistricHouse, BidHouse, RentHouse, create_table, clear_table
 
 
 grabedPool = {}
@@ -75,28 +76,77 @@ def get_header():
             }
     return headers
 
-def before_grab(func):
-    def wapper(*args, **kwargs):
-        if os.path.exists("grabedPool.set"):
-            with open("grabedPool.set", "rb") as f:
-                grabedPool["data"] = pickle.load(f)
-        else:
-            grabedPool["data"] = set([])
+def get_multipart_formdata(data, bondary):
+    post_data = []
+    for key, value in data.iteritems():
+        if value is None:
+            continue
+        post_data.append('--' + bondary )
+	post_data.append('Content-Disposition: form-data; name="{0}"'.format(key))
+        post_data.append('')
+	if isinstance(value, int):
+            value = str(value)
+        post_data.append(value)
+    post_data.append('--' + bondary + '--')
+    post_data.append('')
+    body = '\r\n'.join(post_data)
+    return body.encode('utf-8')
 
-        func(*args, **kwargs)
-    return wapper
+def verify_captcha():
+    url = "http://captcha.lianjia.com"
+    r = requests.get(url, headers= get_header(), timeout= 30)
+    soup = BeautifulSoup(r.content, "lxml")
+    pages = soup.find("form", class_="human").find_all("input")
+    print pages[2]['value'], pages[2]['name']
+    csrf = pages[2]['value']
+    time.sleep(1)
 
+    url = "http://captcha.lianjia.com/human"
+    r = requests.get(url, headers= get_header(), timeout= 30)
+    soup = BeautifulSoup(r.content, "lxml")
+    images = json.loads(r.content)['images']
+    uuid = json.loads(r.content)['uuid']
 
-def after_grab(func):
-    def wapper(*args, **kwargs):
-        try:
-            func(*args, **kwargs)
-        except Exception, e:
-            raise
-        finally:
-            with open("grabedPool.set" , "wb") as f:
-                pickle.dump(grabedPool["data"], f)
-    return wapper
+    #print images
+    for idx in xrange(0, len(images)):
+        fh = open("%d.jpg"%idx, "wb")
+        data = images['%d'%idx].split(',', 1)
+        fh.write(base64.b64decode(data[1]))
+        fh.close()
+
+    step = 0
+    mask = 0
+    while 1:
+        if step == 0:
+            val = raw_input("check 0.jpg reverse,(y/n):\t")
+            if val == 'y' or val == 'Y':
+                mask = mask + 1
+            step = 1
+        elif step == 1:
+            val = raw_input("check 1.jpg reverse,(y/n):\t")
+            if val == 'y' or val == 'Y':
+                mask = mask + 2
+            step = 2
+        elif step == 2:
+            val = raw_input("check 2.jpg reverse,(y/n):\t")
+            if val == 'y' or val == 'Y':
+                mask = mask + 4
+            step = 3
+        elif step == 3:
+            val = raw_input("check 3.jpg reverse,(y/n):\t")
+            if val == 'y' or val == 'Y':
+                mask = mask + 8
+            break
+
+    print mask
+
+    boundary='----WebKitFormBoundary7MA4YWxkTrZu0gW'
+    headers = {'content-type': "multipart/form-data; boundary={0}".format(boundary)}
+    r = requests.post(url, headers=headers, data=get_multipart_formdata({'uuid':uuid, 'bitvalue': mask, '_csrf': csrf}, boundary))
+    print get_multipart_formdata({'uuid':uuid, 'bitvalue': mask, '_csrf': csrf}, boundary)
+
+    print r.request
+
 
 def get_distric_rent_cnt(distric):
     print "try to grab %s community rent cnt "%distric
@@ -106,7 +156,11 @@ def get_distric_rent_cnt(distric):
     soup = BeautifulSoup(r.content, "lxml")
     pages = soup.find("div", class_="page-box house-lst-page-box")
     time.sleep(random.randint(5,10))
-    pageStr = pages["page-data"]
+    try:
+        pageStr = pages["page-data"]
+    except Exception, e:
+        print e,r.content
+        os._exit(0)
     jo = json.loads(pageStr)
     return jo['totalPage']
 
@@ -118,7 +172,11 @@ def get_distric_community_cnt(distric):
     soup = BeautifulSoup(r.content, "lxml")
     pages = soup.find("div", class_="page-box house-lst-page-box")
     time.sleep(random.randint(5,10))
-    pageStr = pages["page-data"]
+    try:
+        pageStr = pages["page-data"]
+    except Exception, e:
+        print e,r.content,r.text
+        os._exit(0)
     jo = json.loads(pageStr)
     return jo['totalPage']
 
@@ -128,7 +186,12 @@ def grab_distric(url):
     r = requests.get(url, headers= get_header(), timeout= 30)
     soup = BeautifulSoup(r.content, "lxml")
 
-    districList = soup.find("ul", class_="listContent").find_all('li')
+    try:
+        districList = soup.find("ul", class_="listContent").find_all('li')
+    except Exception, e:
+        print e,r.content
+        os._exit(0)
+
     if not districList:
         return
 
@@ -212,18 +275,8 @@ def get_distric_chengjiao_cnt(distric, proxy):
         jo = json.loads(pageStr)
         return jo['totalPage']
     except Exception, e:
-        i = random.randint(0,len(proxy)-1)
-        proxies = {
-                "http": proxy[i]
-                }
-        print "try proxy", proxy[i]
-        r = requests.get(url, headers= get_header(), proxies=proxies, timeout= 30)
-        soup = BeautifulSoup(r.content, "lxml")
-        pages = soup.find("div", class_="page-box house-lst-page-box")
-        time.sleep(random.randint(5,10))
-        pageStr = pages["page-data"]
-        jo = json.loads(pageStr)
-        return jo['totalPage']
+        print e,r.content
+        os._exit(0)
 
 def get_distric_bid_cnt(distric, proxy):
     print "try to grab %s bid cnt "%distric
@@ -239,18 +292,20 @@ def get_distric_bid_cnt(distric, proxy):
         jo = json.loads(pageStr)
         return jo['totalPage']
     except Exception, e:
-        i = random.randint(0,len(proxy)-1)
-        proxies = {
-                "http": proxy[i]
-                }
-        print "try proxy", proxy[i]
-        r = requests.get(url, headers= get_header(), proxies=proxies, timeout= 30)
-        soup = BeautifulSoup(r.content, "lxml")
-        pages = soup.find("div", class_="page-box house-lst-page-box")
-        time.sleep(random.randint(5,10))
-        pageStr = pages["page-data"]
-        jo = json.loads(pageStr)
-        return jo['totalPage']
+        print e,r.content
+        os._exit(0)
+        #i = random.randint(0,len(proxy)-1)
+        #proxies = {
+        #        "http": proxy[i]
+        #        }
+        #print "try proxy", proxy[i]
+        #r = requests.get(url, headers= get_header(), proxies=proxies, timeout= 30)
+        #soup = BeautifulSoup(r.content, "lxml")
+        #pages = soup.find("div", class_="page-box house-lst-page-box")
+        #time.sleep(random.randint(5,10))
+        #pageStr = pages["page-data"]
+        #jo = json.loads(pageStr)
+        #return jo['totalPage']
 
 def get_xici_proxy(url, proxys):
     print "get proxy", url
@@ -357,14 +412,8 @@ def grabRent(url, proxy, disName, priceDic, bizDic):
     try:
         bidHoustList = soup.find("ul", class_="house-lst").find_all('li')
     except Exception, e:
-        i = random.randint(0,len(proxy)-1)
-        proxies = {
-                "http": proxy[i]
-                }
-        print "try proxy", proxy[i]
-        r = requests.get(url, headers= get_header(), proxies=proxies, timeout= 10)
-        soup = BeautifulSoup(r.content, "lxml")
-        bidHoustList = soup.find("ul", class_="house-lst").find_all('li')
+        print e,r.content
+        os._exit(0)
 
     if not bidHoustList:
         return
@@ -496,14 +545,8 @@ def grabBid(url, proxy, disName, priceDic):
     try:
         bidHoustList = soup.find("ul", class_="sellListContent").find_all('li')
     except Exception, e:
-        i = random.randint(0,len(proxy)-1)
-        proxies = {
-                "http": proxy[i]
-                }
-        print "try proxy", proxy[i]
-        r = requests.get(url, headers= get_header(), proxies=proxies, timeout= 10)
-        soup = BeautifulSoup(r.content, "lxml")
-        bidHoustList = soup.find("ul", class_="sellListContent").find_all('li')
+        print e,r.content
+        os._exit(0)
 
     if not bidHoustList:
         return
@@ -645,7 +688,6 @@ def grabBid(url, proxy, disName, priceDic):
     # 抓取完成后，休息几秒钟，避免给对方服务器造成大负担
     time.sleep(random.randint(1,3))
 
-@after_grab
 def grab(url, proxy, disName, bizDic):
     print "try to grab page ", url
     r = requests.get(url, headers= get_header(), timeout= 30)
@@ -653,14 +695,8 @@ def grab(url, proxy, disName, bizDic):
     try:
         tradedHoustList = soup.find("ul", class_="listContent").find_all('li')
     except Exception, e:
-        i = random.randint(0,len(proxy)-1)
-        proxies = {
-                "http": proxy[i]
-                }
-        print "try proxy", proxy[i]
-        r = requests.get(url, headers= get_header(), proxies=proxies, timeout= 10)
-        soup = BeautifulSoup(r.content, "lxml")
-        tradedHoustList = soup.find("ul", class_="listContent").find_all('li')
+        print e,r.content
+        os._exit(0)
 
     if not tradedHoustList:
         return
@@ -780,7 +816,7 @@ def grab(url, proxy, disName, bizDic):
                                 decoration = decoration,
                                 elevator = elevator,
                                 floorLevel = floorLevel,
-                                sssssssssssssssssloorTotal = floorTotal,
+                                floorTotal = floorTotal,
                                 build = build,
                                 price = price,
                                 tradeDate = tradeDate,
@@ -819,12 +855,14 @@ def crawl_district():
     global step_context
     for dis_offset in xrange(step_context['offset'], len(gz_district)):
         dis = gz_district[dis_offset]
+        step_context['offset'] = dis_offset
+        save_context()
+
         cnt = step_context['cnt']
         if cnt == 0:
             cnt = get_distric_community_cnt(dis)
         print "get_distric_info", dis, cnt
         step_context['cnt'] = cnt
-        step_context['offset'] = dis_offset
         save_context()
         for i in xrange(step_context['pgoffset'], cnt+1):
             step_context['pgoffset'] = i
@@ -839,6 +877,9 @@ def crawl_district_chengjiao():
     global step_context
     for dis_offset in xrange(step_context['offset'], len(gz_district)):
         dis = gz_district[dis_offset]
+        step_context['offset'] = dis_offset
+        save_context()
+
         distric = DistricHouse.select(DistricHouse.name, DistricHouse.bizcircle, DistricHouse.avgpx).where(DistricHouse.district == gz_district_name[dis])
         print distric
         bizDic = {}
@@ -853,10 +894,9 @@ def crawl_district_chengjiao():
 
         cnt = step_context['cnt']
         if cnt == 0:
-            cnt = get_distric_chengjiao_cnt(dis, proxy)
+            cnt = get_distric_chengjiao_cnt(dis, [])
 
         step_context['cnt'] = cnt
-        step_context['offset'] = dis_offset
         save_context()
         for i in xrange(step_context['pgoffset'], cnt+1):
             step_context['pgoffset'] = i
@@ -884,18 +924,20 @@ def crawl_district_bid():
             priceDic[name] = price
             #print name
 
+        step_context['offset'] = dis_offset
+        save_context()
+
         cnt = step_context['cnt']
         if cnt == 0:
-            cnt = get_distric_bid_cnt(dis, proxy)
+            cnt = get_distric_bid_cnt(dis, [])
 
         step_context['cnt'] = cnt
-        step_context['offset'] = dis_offset
         save_context()
         for i in xrange(step_context['pgoffset'], cnt+1):
             step_context['pgoffset'] = i
             save_context()
             page = "http://gz.lianjia.com/ershoufang/%s/pg%s/"%(dis, format(str(i)))
-            grabBid(page, proxy, gz_district_name[dis], priceDic)
+            grabBid(page, [], gz_district_name[dis], priceDic)
 
         step_context['pgoffset'] = 1
         step_context['cnt'] = 0
@@ -917,18 +959,20 @@ def crawl_district_rent():
             priceDic[name] = price
             #print name
 
+        step_context['offset'] = dis_offset
+        save_context()
+
         cnt = step_context['cnt']
         if cnt == 0:
-            cnt = get_distric_rent_cnt(dis, proxy)
+            cnt = get_distric_rent_cnt(dis)
 
         step_context['cnt'] = cnt
-        step_context['offset'] = dis_offset
         save_context()
         for i in xrange(step_context['pgoffset'], cnt+1):
             step_context['pgoffset'] = i
             save_context()
             page = "http://gz.lianjia.com/zufang/%s/pg%s/"%(dis, format(str(i)))
-            grabRent(page, proxy, gz_district_name[dis], priceDic, bizDic)
+            grabRent(page, [], gz_district_name[dis], priceDic, bizDic)
 
         step_context['pgoffset'] = 1
         step_context['cnt'] = 0
@@ -968,13 +1012,14 @@ def process_context():
         step_context['pgoffset'] = 1
         save_context()
     elif step_context['phase'] == -1:
-        shutil.move('houseprice.db', time.strftime("houseprice_%Y%m%d.db", time.localtime()))
-        create_table()
-        step_context['phase'] = -1
+        #shutil.copy('houseprice.db', time.strftime("houseprice_%Y%m%d.db", time.localtime()))
+        clear_table()
+        step_context['phase'] = 1
 
 if __name__== "__main__":
     #save_context()
     load_context()
+    #verify_captcha()
 
     if step_context['phase'] == -1:
         process_context()

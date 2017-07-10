@@ -89,4 +89,8 @@ def create_table():
 	db.create_tables([TradedHouse, DistricHouse, BidHouse, RentHouse])
 	#db.create_tables([TradedHouse, BidHouse, RentHouse])
 
+def clear_table():
+	db.drop_tables([TradedHouse, BidHouse, RentHouse])
+	db.create_tables([TradedHouse, BidHouse, RentHouse])
+
 #create_table()
