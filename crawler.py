@@ -730,9 +730,9 @@ def grab(url, proxy, disName, bizDic):
         print xiaoqu, houseType, square
 
         dealInfo = item.find("div", class_="totalPrice").span
-        if dealInfo:
+        try:
             deal = string.atof(dealInfo.string.encode("utf-8"))
-        else :
+        except Exception, e:
             deal = -1
         print deal
 
@@ -804,7 +804,7 @@ def grab(url, proxy, disName, bizDic):
             biz = bizDic[xiaoqu]
         except Exception, e:
             biz = "unknown"
-        print bid, cycle, disName, biz
+        #print bid, cycle, disName, biz
 
         # 通过 ORM 存储到 sqlite
         tradeItem = TradedHouse(
