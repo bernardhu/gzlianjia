@@ -249,6 +249,7 @@ def verify_captcha():
 
     url = "http://captcha.lianjia.com/human"
     r = requests.get(url, headers= get_header(), timeout= 30)
+    cookie = r.headers['Set-Cookie']
     soup = BeautifulSoup(r.content, "lxml")
     images = json.loads(r.content)['images']
     uuid = json.loads(r.content)['uuid']
@@ -289,11 +290,13 @@ def verify_captcha():
     boundary='----WebKitFormBoundary7MA4YWxkTrZu0gW'
     headers = get_header()
     headers['content-type'] =  "multipart/form-data; boundary={0}".format(boundary)
+    headers['Cookie'] =  cookie
     print get_multipart_formdata({'uuid':uuid, 'bitvalue': mask, '_csrf': csrf}, boundary)
     print headers
     r = requests.post(url, headers=headers, data=get_multipart_formdata({'uuid':uuid, 'bitvalue': mask, '_csrf': csrf}, boundary))
 
     print r.request
+    print r.content
 
 
 def get_distric_rent_cnt(distric):
