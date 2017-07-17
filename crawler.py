@@ -544,13 +544,16 @@ def build_proxy():
     #get_xici_proxy("http://www.xicidaili.com/nn/1", proxys)
     #get_xici_proxy("http://www.xicidaili.com/nn/2", proxys)
 
-    get_kuaidaili_proxy("http://www.kuaidaili.com/proxylist/1", proxys)
-    get_kuaidaili_proxy("http://www.kuaidaili.com/proxylist/2", proxys)
-    get_kuaidaili_proxy("http://www.kuaidaili.com/proxylist/3", proxys)
-    get_kuaidaili_proxy("http://www.kuaidaili.com/proxylist/4", proxys)
+    #get_kuaidaili_proxy("http://www.kuaidaili.com/proxylist/1", proxys)
+    #get_kuaidaili_proxy("http://www.kuaidaili.com/proxylist/2", proxys)
+    #get_kuaidaili_proxy("http://www.kuaidaili.com/proxylist/3", proxys)
+    #get_kuaidaili_proxy("http://www.kuaidaili.com/proxylist/4", proxys)
 
     #get_youdaili_proxy("http://www.youdaili.net/Daili/http", proxys)
 
+    r = requests.get("http://127.0.0.1:5000/get_all/", headers= get_header(), timeout= 10)
+    print r.content
+    proxys= json.loads(r.content)
     print proxys
 
     return proxys
@@ -690,7 +693,7 @@ def grabRent(url, proxy, disName, priceDic, bizDic):
     time.sleep(random.randint(1,3))
 
 def grabBid(url, proxy, disName, priceDic):
-    print "try to grab page ", url
+    print "try to grabbid page ", url
     r = requests.get(url, headers= get_header(), timeout= 30)
     soup = BeautifulSoup(r.content, "lxml")
     try:
@@ -698,6 +701,14 @@ def grabBid(url, proxy, disName, priceDic):
     except Exception, e:
         print e,r.content
         os._exit(0)
+        i = random.randint(0,len(proxy)-1)
+        proxies = {
+                "http": proxy[i]
+                }
+        print "try proxy", proxy[i]
+        r = requests.get(url, headers= get_header(), proxies=proxies, timeout= 30)
+        soup = BeautifulSoup(r.content, "lxml")
+        bidHoustList = soup.find("ul", class_="sellListContent").find_all('li')
 
     if not bidHoustList:
         return
@@ -839,7 +850,7 @@ def grabBid(url, proxy, disName, priceDic):
     # 抓取完成后，休息几秒钟，避免给对方服务器造成大负担
     time.sleep(random.randint(1,3))
 
-def grab(url, proxy, disName, bizDic):
+def grab(url, proxy, disName, bizDic, lastMarkTrade):
     print "try to grab page ", url
     r = requests.get(url, headers= get_header(), timeout= 30)
     soup = BeautifulSoup(r.content, "lxml")
@@ -847,12 +858,26 @@ def grab(url, proxy, disName, bizDic):
         tradedHoustList = soup.find("ul", class_="listContent").find_all('li')
     except Exception, e:
         print e,r.content
-        os._exit(0)
+        #os._exit(0)
+
+        tradedHoustList = soup.find("li", class_="pictext")
+        if not tradedHoustList:
+            tradedHoustList = soup.find("ul", class_="listContent").find_all('li')
+        else:
+            i = random.randint(0,len(proxy)-1)
+            proxies = {
+                "http": proxy[i]
+                }
+            print "try proxy", proxy[i]
+            r = requests.get(url, headers= get_header(), proxies=proxies, timeout= 30)
+            soup = BeautifulSoup(r.content, "lxml")
+            tradedHoustList = soup.find("ul", class_="listContent").find_all('li')
 
     if not tradedHoustList:
         return
 
     storge = []
+    stop = False
     for item in tradedHoustList:
         # 房屋详情链接，唯一标识符
         houseUrl = item.a["href"] or ''
@@ -902,6 +927,10 @@ def grab(url, proxy, disName, bizDic):
         if dealDate:
             tradeDate = datetime.datetime.strptime(dealDate.string, '%Y.%m.%d') or datetime.datetime(1990, 1, 1)
         print tradeDate
+        if lastMarkTrade >= tradeDate:
+            print 'break for time'
+            stop = True
+            break
 
         #楼层，楼龄
         posInfo = item.find("div", class_="positionInfo").contents[1]
@@ -988,6 +1017,7 @@ def grab(url, proxy, disName, bizDic):
 
     # 抓取完成后，休息几秒钟，避免给对方服务器造成大负担
     time.sleep(random.randint(1,3))
+    return stop
 
 step_context = {"phase":0, "cnt":0, "offset":0, "pgoffset":1, "date":"20170705"}
 
@@ -1049,11 +1079,20 @@ def crawl_district_chengjiao():
 
         step_context['cnt'] = cnt
         save_context()
+
+        ts = TradedHouse.select(TradedHouse.tradeDate).where(TradedHouse.district == gz_district_name[dis]).order_by(TradedHouse.tradeDate.desc()).limit(1)
+        print ts
+        for item in ts:
+            print item.tradeDate, type(item.tradeDate)
+            lastMarkTrade = item.tradeDate
+
         for i in xrange(step_context['pgoffset'], cnt+1):
             step_context['pgoffset'] = i
             save_context()
             page = "http://gz.lianjia.com/chengjiao/%s/pg%s/"%(dis, format(str(i)))
-            grab(page, [], gz_district_name[dis], bizDic)
+            stop = grab(page, [], gz_district_name[dis], bizDic, lastMarkTrade)
+            if stop == True:
+                break
 
         step_context['pgoffset'] = 1
         step_context['cnt'] = 0
@@ -1061,6 +1100,7 @@ def crawl_district_chengjiao():
 
 def crawl_district_bid():
     global step_context
+    #proxy = build_proxy()
     for dis_offset in xrange(step_context['offset'], len(gz_district)):
         dis = gz_district[dis_offset]
         distric = DistricHouse.select(DistricHouse.name, DistricHouse.bizcircle, DistricHouse.avgpx).where(DistricHouse.district == gz_district_name[dis])
