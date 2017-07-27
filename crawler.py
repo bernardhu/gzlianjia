@@ -65,7 +65,153 @@ user_agent_list = [
         "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.5; en-US; rv:1.9.1) Gecko/20090624 Firefox/3.5",
         "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.6; en-US; rv:1.9.2.14) Gecko/20110218 AlexaToolbar/alxf-2.0 Firefox/3.6.14",
         "Mozilla/5.0 (Macintosh; U; PPC Mac OS X 10.5; en-US; rv:1.9.2.15) Gecko/20110303 Firefox/3.6.15",
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv:2.0.1) Gecko/20100101 Firefox/4.0.1"
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.6; rv:2.0.1) Gecko/20100101 Firefox/4.0.1",
+        "Mozilla/5.0 (iPad; CPU OS 9_0 like Mac OS X) AppleWebKit/601.1.17 (KHTML, like Gecko) Version/8.0 Mobile/13A175 Safari/600.1.4",
+        "Mozilla/5.0 (iPad; CPU OS 9_0 like Mac OS X) AppleWebKit/601.1.39 (KHTML, like Gecko) Version/9.0 Mobile/13A4305g Safari/601.1",
+        "Mozilla/5.0 (iPad; CPU OS 9_0 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13A344 Safari/601.1",
+        "Mozilla/5.0 (iPad; CPU OS 9_0 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) CriOS/45.0.2454.89 Mobile/13A344 Safari/600.1.4 (000205)",
+        "Mozilla/5.0 (iPad; CPU OS 9_0 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) GSA/8.0.57838 Mobile/13A344 Safari/600.1.4",
+        "Mozilla/5.0 (iPad; CPU OS 9_0_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13A404 Safari/601.1",
+        "Mozilla/5.0 (iPad; CPU OS 9_0 like Mac OS X) AppleWebKit/631.1.17 (KHTML, like Gecko) Version/8.0 Mobile/13A171 Safari/637.1.4",
+        "Mozilla/5.0 (iPad; CPU OS 9_0_1 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) GSA/6.0.51363 Mobile/13A404 Safari/600.1.4",
+        "Mozilla/5.0 (iPad; CPU OS 9_1 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) GSA/8.0.57838 Mobile/13B5110e Safari/600.1.4",
+        "Mozilla/5.0 (iPad; CPU OS 9_0_1 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) CriOS/45.0.2454.89 Mobile/13A404 Safari/600.1.4 (000994)",
+        "Mozilla/5.0 (iPad; CPU OS 9_0_1 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) CriOS/45.0.2454.89 Mobile/13A404 Safari/600.1.4 (000862)",
+        "Mozilla/5.0 (iPad; CPU OS 9_0_1 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) CriOS/45.0.2454.89 Mobile/13A404 Safari/600.1.4 (000065)",
+        "Mozilla/5.0 (iPad; CPU OS 9_0_2 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) GSA/5.2.43972 Mobile/13A452 Safari/600.1.4",
+        "Mozilla/5.0 (iPad; CPU OS 9_0_2 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13A452 Safari/601.1",
+        "Mozilla/5.0 (iPad; CPU OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B5130b Safari/601.1",
+        "Mozilla/5.0 (iPad; CPU OS 9_0_1 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) CriOS/45.0.2454.89 Mobile/13A404 Safari/600.1.4 (000539)",
+        "Mozilla/5.0 (iPad; CPU OS 9_0_2 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) CriOS/45.0.2454.89 Mobile/13A452 Safari/600.1.4 (000549)",
+        "Mozilla/5.0 (iPad; CPU OS 9_0_2 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) CriOS/45.0.2454.89 Mobile/13A452 Safari/600.1.4 (000570)",
+        "Mozilla/5.0 (iPad; CPU OS 9_0_2 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) CriOS/44.0.2403.67 Mobile/13A452 Safari/600.1.4 (000693)",
+        "Mozilla/5.0 (iPad; CPU OS 9_0_1 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) GSA/9.0.60246 Mobile/13A404 Safari/600.1.4",
+        "Mozilla/5.0 (iPad; CPU OS 9_0_2 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) CriOS/45.0.2454.89 Mobile/13A452 Safari/600.1.4 (000292)",
+        "Mozilla/5.0 (iPad; CPU OS 9_0_2 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) GSA/9.0.60246 Mobile/13A452 Safari/600.1.4",
+        "Mozilla/5.0 (iPad; CPU OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B137 Safari/601.1",
+        "Mozilla/5.0 (iPad; CPU OS 9_0_2 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) CriOS/45.0.2454.89 Mobile/13A452 Safari/600.1.4 (000996)",
+        "Mozilla/5.0 (iPad; CPU OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1",
+        "Mozilla/5.0 (iPad; CPU OS 9_1 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) CriOS/46.0.2490.73 Mobile/13B143 Safari/600.1.4 (000648)",
+        "Mozilla/5.0 (iPad; CPU OS 9_1 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) CriOS/46.0.2490.73 Mobile/13B143 Safari/600.1.4 (000119)",
+        "Mozilla/5.0 (iPad; CPU OS 9_1 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) GSA/9.0.60246 Mobile/13B143 Safari/600.1.4",
+        "Mozilla/5.0 (iPad; CPU OS 9_1 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) CriOS/46.0.2490.73 Mobile/13B143 Safari/600.1.4 (000923)",
+        "Mozilla/5.0 (iPad; CPU OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) FxiOS/1.2 Mobile/13B143 Safari/601.1.46",
+        "Mozilla/5.0 (iPad; CPU OS 9_0 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13A340 Safari/601.1",
+        "Mozilla/5.0 (iPad; CPU OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Mobile/13B143",
+        "Mozilla/5.0 (iPad; CPU OS 9_1 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) GSA/10.0.63022 Mobile/13B143 Safari/600.1.4",
+        "Mozilla/5.0 (iPad; CPU OS 9_0 like Mac OS X) AppleWebKit/601.1.17 (KHTML, like Gecko) Version/8.0 Mobile/13A175 Safari/600.1.4",
+        "Mozilla/5.0 (iPad; CPU OS 9_2 like Mac OS X) AppleWebKit/601.1.56 (KHTML, like Gecko) Version/9.0 Mobile/13c75 Safari/601.1.56",
+        "Mozilla/5.0 (iPad; CPU OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B144 Safari/601.1",
+        "Mozilla/5.0 (iPad; CPU OS 9_2 like Mac OS X) AppleWebKit/601.1 (KHTML, like Gecko) CriOS/47.0.2526.70 Mobile/13C75 Safari/601.1.46 (000144)",
+        "Mozilla/5.0 (iPad; CPU OS 9_2 like Mac OS X) AppleWebKit/601.1 (KHTML, like Gecko) CriOS/47.0.2526.70 Mobile/13C75 Safari/601.1.46 (000042)",
+        "Mozilla/5.0 (iPad; CPU OS 9_2 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13C75 Safari/601.1",
+        "Mozilla/5.0 (iPad; CPU OS 7_1_1 like Mac OS X) AppleWebKit/537.51.2 (KHTML, like Gecko) CriOS/38.0.2125.59 Mobile/11D201 Safari/9537.53",
+        "Mozilla/5.0 (iPad; CPU OS 9_1 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) GSA/11.0.65374 Mobile/13B143 Safari/600.1.4",
+        "Mozilla/5.0 (iPad; CPU OS 9_2 like Mac OS X) AppleWebKit/601.1 (KHTML, like Gecko) CriOS/47.0.2526.70 Mobile/13C75 Safari/601.1.46 (000468)",
+        "Mozilla/5.0 (iPad; CPU OS 9_2 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) GSA/11.0.65374 Mobile/13C75 Safari/600.1.4",
+        "Mozilla/5.0 (iPad; CPU OS 9_0 like Mac OS X) AppleWebKit/601.1.16 (KHTML, like Gecko) Version/8.0 Mobile/13A171a Safari/600.1.4",
+        "Mozilla/5.0 (iPad; CPU OS 9_2 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) GSA/11.1.66360 Mobile/13C75 Safari/600.1.4",
+        "Mozilla/5.0 (iPad; CPU OS 9_2 like Mac OS X) AppleWebKit/601.1 (KHTML, like Gecko) CriOS/47.0.2526.83 Mobile/13C75 Safari/601.1.46 (000468)",
+        "Mozilla/5.0 (iPad; CPU OS 9_2 like Mac OS X) AppleWebKit/601.1 (KHTML, like Gecko) CriOS/47.0.2526.107 Mobile/13C75 Safari/601.1.46 (000702)",
+        "Mozilla/5.0 (iPad; CPU OS 9_0_2 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/10A403 Safari/601.1",
+        "Mozilla/5.0 (iPad; CPU OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B14 3 Safari/601.1",
+        "Mozilla/5.0 (iPad; CPU OS 9_2_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13D15 Safari/601.1",
+        "Mozilla/5.0 (iPad; CPU OS 9_0_2 like Mac OS X) AppleWebKit/601.1 (KHTML, like Gecko) CriOS/47.0.2526.107 Mobile/13A452 Safari/601.1.46 (000412)",
+        "Mozilla/5.0 (iPad; CPU OS 9_2_1 like Mac OS X) AppleWebKit/601.1 (KHTML, like Gecko) CriOS/47.0.2526.107 Mobile/13D15 Safari/601.1.46",
+        "Mozilla/5.0 (iPad; CPU OS 9_2_1 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) GSA/12.0.68608 Mobile/13D15 Safari/600.1.4",
+        "Mozilla/5.0 (iPad; CPU OS 9_0_2 like Mac OS X) AppleWebKit/601.1 (KHTML, like Gecko) CriOS/48.0.2564.87 Mobile/13A452 Safari/601.1.46 (000715)",
+        "Mozilla/5.0 (iPad; CPU OS 9_2_1 like Mac OS X) AppleWebKit/601.1 (KHTML, like Gecko) CriOS/48.0.2564.87 Mobile/13D15 Safari/601.1.46",
+        "Mozilla/5.0 (iPad; CPU OS 9_1 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) CriOS/45.0.2454.89 Mobile/13B143 Safari/600.1.4 (000381)",
+        "Mozilla/5.0 (iPad; CPU OS 9_3 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13E5200d Safari/601.1",
+        "Mozilla/5.0 (iPad; CPU OS 9_3 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13E5200d Safari/601.1",
+        "Mozilla/5.0 (iPad; CPU OS 9_2_1 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) GSA/11.1.66360 Mobile/13D15 Safari/600.1.4",
+        "Mozilla/5.0 (iPad; CPU OS 9_1 like Mac OS X) AppleWebKit/601.1 (KHTML, like Gecko) CriOS/48.0.2564.104 Mobile/13B143 Safari/601.1.46",
+        "Mozilla/5.0 (iPad; CPU OS 9_2_1 like Mac OS X) AppleWebKit/601.1 (KHTML, like Gecko) CriOS/48.0.2564.104 Mobile/13D15 Safari/601.1.46",
+        "Mozilla/5.0 (iPad; CPU OS 9_3 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13E5200d Safari/601.1.46",
+        "Mozilla/5.0 (iPad; CPU OS 9_3 like Mac OS X) AppleWebKit/601.1 (KHTML, like Gecko) CriOS/48.0.2564.104 Mobile/13E5200d Safari/601.1.46",
+        "Mozilla/5.0 (iPad; CPU OS 9_2 like Mac OS X) AppleWebKit/601.1 (KHTML, like Gecko) CriOS/47.0.2526.83 Mobile/13C75 Safari/601.1.46",
+        "Mozilla/5.0 (iPad; CPU OS 9_2 like Mac OS X) AppleWebKit/601.1 (KHTML, like Gecko) CriOS/47.0.2526.83 Mobile/13C75 Safari/601.1.46 (000381)",
+        "Mozilla/5.0 (iPad; CPU OS 9_0 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Mobile/13A344 Shelter/1.0.0 (YmqLQeAh3Z-nBdz2i87Rf) ",
+        "Mozilla/5.0 (iPad; CPU OS 9_1 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) CriOS/46.0.2490.73 Mobile/13C143 Safari/600.1.4 (000718)",
+        "Mozilla/5.0 (iPad; CPU OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13A143 Safari/601.1",
+        "Mozilla/5.0 (iPad; CPU OS 9_3 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) FxiOS/1.4 Mobile/13E5181f Safari/601.1.46",
+        "Mozilla/5.0 (iPad; CPU OS 9_2_1 like Mac OS X) AppleWebKit/601.1 (KHTML, like Gecko) CriOS/49.0.2623.73 Mobile/13D15 Safari/601.1.46",
+        "Mozilla/5.0 (iPad; CPU OS 9_2_1 like Mac OS X) AppleWebKit/601.1 (KHTML, like Gecko) CriOS/49.0.2623.73 Mobile/13A15 Safari/601.1.46",
+        "Mozilla/5.0 (iPad; CPU OS 9_3 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13E233 Safari/601.1",
+        "Mozilla/5.0 (iPad; CPU OS 9_3 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) GSA/13.1.72140 Mobile/13E233 Safari/600.1.4",
+        "Mozilla/5.0 (iPad; CPU OS 9_3 like Mac OS X) AppleWebKit/601.1 (KHTML, like Gecko) CriOS/49.0.2623.73 Mobile/13E233 Safari/601.1.46",
+        "Mozilla/5.0 (iPad; CPU OS 9_3_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13E238 Safari/601.1",
+        "Mozilla/5.0 (iPad; CPU OS 9_3_1 like Mac OS X) AppleWebKit/601.1 (KHTML, like Gecko) CriOS/49.0.2623.109 Mobile/13E238 Safari/601.1.46",
+        "Mozilla/5.0 (iPad; CPU OS 9_0_2 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) FxiOS/1.4 Mobile/13A452 Safari/601.1.46",
+        "Mozilla/5.0 (iPad; CPU OS 9_1 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) CriOS/44.0.2403.67 Mobile/13B143 Safari/600.1.4 (000073)",
+        "Mozilla/5.0 (iPad; CPU OS 9_3_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) FxiOS/3.0 Mobile/13E238 Safari/601.1.46",
+        "Mozilla/5.0 (iPad; CPU OS 9_3_1 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) GSA/14.1.119979954 Mobile/13E238 Safari/600.1.4",
+        "Mozilla/5.0 (iPad; CPU OS 9_3_1 like Mac OS X) AppleWebKit/601.1 (KHTML, like Gecko) CriOS/50.0.2661.95 Mobile/13E238 Safari/601.1.46",
+        "Mozilla/5.0 (iPad; CPU OS 9_3 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13E234 Safari/601.1",
+        "Mozilla/5.0 (iPad; CPU OS 9_3_2 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13F69 Safari/601.1",
+        "Mozilla/5.0 (iPad; CPU OS 9_3 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13E237 Safari/601.1",
+        "Mozilla/5.0 (iPad; CPU OS 9_3_2 like Mac OS X) AppleWebKit/601.1 (KHTML, like Gecko) CriOS/50.0.2661.95 Mobile/13F69 Safari/601.1.46",
+        "Mozilla/5.0 (iPad; CPU OS 9_3_2 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) GSA/15.1.122860578 Mobile/13F69 Safari/600.1.4",
+        "Mozilla/5.0 (iPad; CPU OS 9_3_2 like Mac OS X) AppleWebKit/601.1 (KHTML, like Gecko) CriOS/51.0.2704.64 Mobile/13F69 Safari/601.1.46",
+        "Mozilla/5.0 (iPad; CPU OS 9_3_2 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13F72 Safari/601.1",
+        "Mozilla/5.0 (iPad; CPU OS 9_3_1 like Mac OS X) AppleWebKit/601.1 (KHTML, like Gecko) CriOS/51.0.2704.104 Mobile/13E238 Safari/601.1.46",
+        "Mozilla/5.0 (iPad; CPU OS 9_2_1 like Mac OS X) AppleWebKit/601.1 (KHTML, like Gecko) CriOS/50.0.2661.77 Mobile/13D15 Safari/601.1.46",
+        "Mozilla/5.0 (iPad; CPU OS 9_3_2 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) FxiOS/4.0 Mobile/13F69 Safari/601.1.46",
+        "Mozilla/5.0 (iPad; CPU OS 9_3_2 like Mac OS X) AppleWebKit/601.1 (KHTML, like Gecko) CriOS/51.0.2704.104 Mobile/13F69 Safari/601.1.46",
+        "Mozilla/5.0 (iPad; CPU OS 9_3_2 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) GSA/16.0.124986583 Mobile/13F69 Safari/600.1.4",
+        "Mozilla/5.0 (iPad; CPU OS 9_3 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) FxiOS/2.0 Mobile/13E5200d Safari/601.1.46",
+        "Mozilla/5.0 (iPad; CPU OS 9_3_3 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13G34 Safari/601.1",
+        "Mozilla/5.0 (iPad; CPU OS 9_3_2 like Mac OS X) AppleWebKit/601.1 (KHTML, like Gecko) CriOS/52.0.2743.84 Mobile/13F69 Safari/601.1.46",
+        "Mozilla/5.0 (iPad; CPU OS 9_3 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13E188a Safari/601.1",
+        "Mozilla/5.0 (iPad; CPU OS 9_3_4 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) GSA/17.0.128207670 Mobile/13G35 Safari/600.1.4",
+        "Mozilla/5.0 (iPad; CPU OS 9_3_3 like Mac OS X) AppleWebKit/601.1 (KHTML, like Gecko) CriOS/50.0.2661.95 Mobile/13G34 Safari/601.1.46",
+        "Mozilla/5.0 (iPad; CPU OS 9_3_4 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13G35 Safari/601.1",
+        "Mozilla/5.0 (iPad; CPU OS 9_3_4 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Mobile/13G35",
+        "Mozilla/5.0 (iPad; CPU OS 9_3_4 like Mac OS X) AppleWebKit/601.1 (KHTML, like Gecko) CriOS/52.0.2743.84 Mobile/13G35 Safari/601.1.46",
+        "Mozilla/5.0 (iPad; CPU OS 9_3_4 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) FxiOS/5.0 Mobile/13G35 Safari/601.1.46",
+        "Mozilla/5.0 (iPad; CPU OS 9_3_2 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Mobile/13F69 iPadApp",
+        "Mozilla/5.0 (iPad; CPU OS 9_3_4 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13G35 Safari/601.1 MXiOS/4.9.0.60",
+        "Mozilla/5.0 (iPad; CPU OS 9_3_2 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Mobile/13F69",
+        "Mozilla/5.0 (iPad; CPU OS 9_3_4 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) GSA/18.0.130791545 Mobile/13G35 Safari/600.1.4",
+        "Mozilla/5.0 (iPad; CPU OS 9_3_5 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13G36 Safari/601.1",
+        "Mozilla/5.0 (iPad; CPU OS 9_3_5 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) GSA/18.0.130791545 Mobile/13G36 Safari/600.1.4",
+        "Mozilla/5.0 (iPad; CPU OS 7_1 like Mac OS X) AppleWebKit/537.51.3 (KHTML, like Gecko) Version/7.0 Mobile/11A4149 Safari/9537.72",
+        "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36",
+        "Mozilla/5.0 (iPad; CPU OS 9_0 like Mac OS X) AppleWebKit/601.1.17 (KHTML, like Gecko) Version/8.0 Mobile/13A175 Safari/600.1.4",
+        "Mozilla/5.0 (iPad; CPU OS 9_3_5 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) GSA/18.1.132077863 Mobile/13G36 Safari/600.1.4",
+        "Mozilla/5.0 (iPad; CPU OS 9_3_5 like Mac OS X) AppleWebKit/601.1 (KHTML, like Gecko) CriOS/53.0.2785.86 Mobile/13G36 Safari/601.1.46",
+        "Mozilla/5.0 (iPad; CPU OS 9_3_2 like Mac OS X) AppleWebKit/601.1 (KHTML, like Gecko) CriOS/53.0.2785.109 Mobile/13F69 Safari/601.1.46",
+        "Mozilla/5.0 (iPad; CPU OS 9_3_5 like Mac OS X) AppleWebKit/601.1 (KHTML, like Gecko) CriOS/53.0.2785.109 Mobile/13G36 Safari/601.1.46",
+        "Mozilla/5.0 (iPad; CPU OS 9_2 like Mac OSX) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13A452 Safari/601.1",
+        "Mozilla/5.0 (iPad; CPU OS 9_2_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Mobile/13D11",
+        "Mozilla/5.0 (iPad; CPU OS 9_3_5 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Mobile/13G36 Safari/601.1.46 Sleipnir/4.3.0m",
+        "Mozilla/5.0 (iPad; CPU OS 9_0_2 like Mac OS X) AppleWebKit/601.1 (KHTML, like Gecko) CriOS/53.0.2785.86 Mobile/13A452 Safari/601.1.46",
+        "Mozilla/5.0 (iPad; CPU OS 9_3_5 like Mac OS X) AppleWebKit/601.1.46.140 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1",
+        "Mozilla/5.0 (iPad; CPU OS 9_3_5 like Mac OS X) AppleWebKit/601.1 (KHTML, like Gecko) CriOS/54.0.2840.66 Mobile/13G36 Safari/601.1.46",
+        "Mozilla/5.0 (iPad; CPU OS 9_3_5 like Mac OS X) AppleWebKit/601.1 (KHTML, like Gecko) CriOS/54.0.2840.91 Mobile/13G36 Safari/601.1.46",
+        "Mozilla/5.0 (iPad; CPU OS 9_3_2 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Mobile/13F69 Safari/601.1.46 Sleipnir/4.3.2m",
+        "Mozilla/5.0 (iPad; CPU OS 9_3_5 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Mobile/13G36",
+        "Mozilla/5.0 (iPad; CPU OS 9_2_1 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) GSA/5.3.48993 Mobile/13D15 Safari/600.1.4",
+        "Mozilla/5.0 (iPad; CPU OS 9_3_1 like Mac OS X) AppleWebKit/601.1 (KHTML, like Gecko) CriOS/54.0.2840.66 Mobile/13E238 Safari/601.1.46",
+        "Mozilla/5.0 (iPad; CPU OS 9_3_1 like Mac OS X) AppleWebKit/601.1 (KHTML, like Gecko) CriOS/50.0.2661.77 Mobile/13E238 Safari/601.1.46",
+        "Mozilla/5.0 (iPad; CPU OS 9_3_5 like Mac OS X) AppleWebKit/601.1 (KHTML, like Gecko) CriOS/55.0.2883.79 Mobile/13G36 Safari/601.1.46",
+        "Mozilla/5.0 (iPad; CPU OS 9_3_2 like Mac OS X) AppleWebKit/601.1 (KHTML, like Gecko) CriOS/55.0.2883.79 Mobile/13F69 Safari/601.1.46",
+        "Mozilla/5.0 (iPad; CPU OS 9_3_5 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) FxiOS/5.3 Mobile/13G36 Safari/601.1.46",
+        "Mozilla/5.0 (iPad; CPU OS 9_3_5 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) GSA/22.0.141836113 Mobile/13G36 Safari/600.1.4",
+        "Mozilla/5.0 (iPad; CPU OS 9_2_1 like Mac OS X) AppleWebKit/601.1 (KHTML, like Gecko) CriOS/56.0.2924.79 Mobile/13D15 Safari/601.1.46",
+        "Mozilla/5.0 (iPad; CPU OS 9_3_5 like Mac OS X) AppleWebKit/601.1 (KHTML, like Gecko) CriOS/56.0.2924.79 Mobile/13G36 Safari/601.1.46",
+        "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.112 Safari/537.36",
+        "Mozilla/5.0 (iPad; CPU OS 9_3_5 like Mac OS X) AppleWebKit/601.1 (KHTML, like Gecko) CriOS/56.0.2924.79 Mobile/13G36 Safari/601.1.46",
+        "Mozilla/5.0 (iPad; CPU OS 9_3_5 like Mac OS X) AppleWebKit/601.1 (KHTML, like Gecko) CriOS/57.0.2987.100 Mobile/13G36 Safari/601.1.46",
+        "Mozilla/5.0 (iPad; CPU OS 9_2_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) FxiOS/6.1 Mobile/13D15 Safari/601.1.46",
+        "Mozilla/5.0 (iPad; CPU OS 9_2 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13BC75 Safari/601.1",
+        "Mozilla/5.0 (iPad; CPU OS 9_3_3 like Mac OS X) AppleWebKit/601.1 (KHTML, like Gecko) CriOS/56.0.2924.79 Mobile/13G34 Safari/601.1.46",
+        "Mozilla/5.0 (iPad; CPU OS 9_3_5 like Mac OS X) AppleWebKit/601.1 (KHTML, like Gecko) CriOS/57.0.2987.137 Mobile/13G36 Safari/601.1.46",
+        "Mozilla/5.0 (iPad; CPU OS 9_3_5 like Mac OS X) AppleWebKit/601.1.46(KHTML, like Gecko) FxiOS/6.1 Mobile/13G36 Safari/601.1.46",
+        "Mozilla/6.0 (iPhone; CPU iPhone OS 8_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/8.0 Mobile/10A5376e Safari/8536.25",
+        "Mozilla/5.0 (iPad; CPU OS 9_0 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) Version/9.0 Mobile/13A340 Safari/600.1.4",
+        "Mozilla/5.0 (iPad; CPU OS 9_3_5 like Mac OS X) AppleWebKit/537.51.2 (KHTML, like Gecko) CriOS/36.0.1985.49 Mobile/13G36 Safari/9537.53",
+        "Mozilla/5.0 (iPad; CPU OS 9_3_5 like Mac OS X) AppleWebKit/601.1 (KHTML, like Gecko) CriOS/59.0.3071.102 Mobile/13G36 Safari/601.1.46"
         ]
 
 def get_header():
@@ -103,6 +249,7 @@ def verify_captcha():
 
     url = "http://captcha.lianjia.com/human"
     r = requests.get(url, headers= get_header(), timeout= 30)
+    cookie = r.headers['Set-Cookie']
     soup = BeautifulSoup(r.content, "lxml")
     images = json.loads(r.content)['images']
     uuid = json.loads(r.content)['uuid']
@@ -141,11 +288,15 @@ def verify_captcha():
     print mask
 
     boundary='----WebKitFormBoundary7MA4YWxkTrZu0gW'
-    headers = {'content-type': "multipart/form-data; boundary={0}".format(boundary)}
-    r = requests.post(url, headers=headers, data=get_multipart_formdata({'uuid':uuid, 'bitvalue': mask, '_csrf': csrf}, boundary))
+    headers = get_header()
+    headers['content-type'] =  "multipart/form-data; boundary={0}".format(boundary)
+    headers['Cookie'] =  cookie
     print get_multipart_formdata({'uuid':uuid, 'bitvalue': mask, '_csrf': csrf}, boundary)
+    print headers
+    r = requests.post(url, headers=headers, data=get_multipart_formdata({'uuid':uuid, 'bitvalue': mask, '_csrf': csrf}, boundary))
 
     print r.request
+    print r.content
 
 
 def get_distric_rent_cnt(distric):
@@ -393,13 +544,16 @@ def build_proxy():
     #get_xici_proxy("http://www.xicidaili.com/nn/1", proxys)
     #get_xici_proxy("http://www.xicidaili.com/nn/2", proxys)
 
-    get_kuaidaili_proxy("http://www.kuaidaili.com/proxylist/1", proxys)
-    get_kuaidaili_proxy("http://www.kuaidaili.com/proxylist/2", proxys)
-    get_kuaidaili_proxy("http://www.kuaidaili.com/proxylist/3", proxys)
-    get_kuaidaili_proxy("http://www.kuaidaili.com/proxylist/4", proxys)
+    #get_kuaidaili_proxy("http://www.kuaidaili.com/proxylist/1", proxys)
+    #get_kuaidaili_proxy("http://www.kuaidaili.com/proxylist/2", proxys)
+    #get_kuaidaili_proxy("http://www.kuaidaili.com/proxylist/3", proxys)
+    #get_kuaidaili_proxy("http://www.kuaidaili.com/proxylist/4", proxys)
 
     #get_youdaili_proxy("http://www.youdaili.net/Daili/http", proxys)
 
+    r = requests.get("http://127.0.0.1:5000/get_all/", headers= get_header(), timeout= 10)
+    print r.content
+    proxys= json.loads(r.content)
     print proxys
 
     return proxys
@@ -539,7 +693,7 @@ def grabRent(url, proxy, disName, priceDic, bizDic):
     time.sleep(random.randint(1,3))
 
 def grabBid(url, proxy, disName, priceDic):
-    print "try to grab page ", url
+    print "try to grabbid page ", url
     r = requests.get(url, headers= get_header(), timeout= 30)
     soup = BeautifulSoup(r.content, "lxml")
     try:
@@ -547,6 +701,14 @@ def grabBid(url, proxy, disName, priceDic):
     except Exception, e:
         print e,r.content
         os._exit(0)
+        i = random.randint(0,len(proxy)-1)
+        proxies = {
+                "http": proxy[i]
+                }
+        print "try proxy", proxy[i]
+        r = requests.get(url, headers= get_header(), proxies=proxies, timeout= 30)
+        soup = BeautifulSoup(r.content, "lxml")
+        bidHoustList = soup.find("ul", class_="sellListContent").find_all('li')
 
     if not bidHoustList:
         return
@@ -688,7 +850,7 @@ def grabBid(url, proxy, disName, priceDic):
     # 抓取完成后，休息几秒钟，避免给对方服务器造成大负担
     time.sleep(random.randint(1,3))
 
-def grab(url, proxy, disName, bizDic):
+def grab(url, proxy, disName, bizDic, lastMarkTrade):
     print "try to grab page ", url
     r = requests.get(url, headers= get_header(), timeout= 30)
     soup = BeautifulSoup(r.content, "lxml")
@@ -696,12 +858,26 @@ def grab(url, proxy, disName, bizDic):
         tradedHoustList = soup.find("ul", class_="listContent").find_all('li')
     except Exception, e:
         print e,r.content
-        os._exit(0)
+        #os._exit(0)
+
+        tradedHoustList = soup.find("li", class_="pictext")
+        if not tradedHoustList:
+            tradedHoustList = soup.find("ul", class_="listContent").find_all('li')
+        else:
+            i = random.randint(0,len(proxy)-1)
+            proxies = {
+                "http": proxy[i]
+                }
+            print "try proxy", proxy[i]
+            r = requests.get(url, headers= get_header(), proxies=proxies, timeout= 30)
+            soup = BeautifulSoup(r.content, "lxml")
+            tradedHoustList = soup.find("ul", class_="listContent").find_all('li')
 
     if not tradedHoustList:
         return
 
     storge = []
+    stop = False
     for item in tradedHoustList:
         # 房屋详情链接，唯一标识符
         houseUrl = item.a["href"] or ''
@@ -751,6 +927,10 @@ def grab(url, proxy, disName, bizDic):
         if dealDate:
             tradeDate = datetime.datetime.strptime(dealDate.string, '%Y.%m.%d') or datetime.datetime(1990, 1, 1)
         print tradeDate
+        if lastMarkTrade >= tradeDate:
+            print 'break for time'
+            stop = True
+            break
 
         #楼层，楼龄
         posInfo = item.find("div", class_="positionInfo").contents[1]
@@ -837,6 +1017,7 @@ def grab(url, proxy, disName, bizDic):
 
     # 抓取完成后，休息几秒钟，避免给对方服务器造成大负担
     time.sleep(random.randint(1,3))
+    return stop
 
 step_context = {"phase":0, "cnt":0, "offset":0, "pgoffset":1, "date":"20170705"}
 
@@ -898,11 +1079,20 @@ def crawl_district_chengjiao():
 
         step_context['cnt'] = cnt
         save_context()
+
+        ts = TradedHouse.select(TradedHouse.tradeDate).where(TradedHouse.district == gz_district_name[dis]).order_by(TradedHouse.tradeDate.desc()).limit(1)
+        print ts
+        for item in ts:
+            print item.tradeDate, type(item.tradeDate)
+            lastMarkTrade = item.tradeDate
+
         for i in xrange(step_context['pgoffset'], cnt+1):
             step_context['pgoffset'] = i
             save_context()
             page = "http://gz.lianjia.com/chengjiao/%s/pg%s/"%(dis, format(str(i)))
-            grab(page, [], gz_district_name[dis], bizDic)
+            stop = grab(page, [], gz_district_name[dis], bizDic, lastMarkTrade)
+            if stop == True:
+                break
 
         step_context['pgoffset'] = 1
         step_context['cnt'] = 0
@@ -910,6 +1100,7 @@ def crawl_district_chengjiao():
 
 def crawl_district_bid():
     global step_context
+    #proxy = build_proxy()
     for dis_offset in xrange(step_context['offset'], len(gz_district)):
         dis = gz_district[dis_offset]
         distric = DistricHouse.select(DistricHouse.name, DistricHouse.bizcircle, DistricHouse.avgpx).where(DistricHouse.district == gz_district_name[dis])
